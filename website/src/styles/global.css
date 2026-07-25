@@ -1,1 +1,160 @@
 @import 'tailwindcss';
+
+/**
+ * NIVO Group design tokens.
+ *
+ * Declared in Tailwind's `@theme` so each token is emitted as a CSS custom
+ * property on :root AND generates matching utilities (bg-nivo-navy,
+ * text-nivo-text-muted, border-nivo-border, ...). Components use the
+ * utilities; raw var() is reserved for the base layer below.
+ *
+ * Brand values mirror `colors` in src/config/site.ts. CSS cannot import from
+ * TypeScript at build time, so navy and gold are the one deliberate
+ * duplication in the codebase — keep both in sync when brand colors change.
+ */
+@theme {
+  /* Brand */
+  --color-nivo-navy: #0b1f3a;
+  --color-nivo-gold: #c8a951;
+
+  /* Surfaces */
+  --color-nivo-background: #ffffff;
+  --color-nivo-surface: #f7f8fa;
+
+  /* Text — gold is never used for text on light surfaces (2.3:1). */
+  --color-nivo-text: #0b1f3a;
+  --color-nivo-text-muted: #4a5568;
+  --color-nivo-text-inverse: #ffffff;
+  --color-nivo-text-inverse-muted: #b6c0cf;
+
+  /* Lines */
+  --color-nivo-border: #e3e6eb;
+  --color-nivo-border-strong: #c9cfd8;
+
+  /*
+   * System stack only — no webfont requests. Arabic faces are listed after the
+   * Latin ones so Arabic text resolves to a real Arabic system font today, and
+   * a licensed webfont can be prepended later without touching components.
+   */
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans Arabic', 'Segoe UI Arabic', 'Geeza Pro', Tahoma, sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-nivo-background);
+    color: var(--color-nivo-text);
+    font-family: var(--font-sans);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--color-nivo-navy);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  /*
+   * Arabic script joins its letters, so negative tracking damages legibility.
+   * Reset it and give the taller script more leading.
+   */
+  [lang='ar'] {
+    letter-spacing: normal;
+    line-height: 1.9;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  /* Navy meets 3:1 against both white and the light surface token. */
+  :focus-visible {
+    outline: 2px solid var(--color-nivo-navy);
+    outline-offset: 2px;
+  }
+
+  /* Gold clears 3:1 against navy, where a navy ring would be invisible. */
+  .nivo-on-navy :focus-visible {
+    outline-color: var(--color-nivo-gold);
+  }
+
+  ::selection {
+    background-color: var(--color-nivo-gold);
+    color: var(--color-nivo-navy);
+  }
+}
+
+@layer components {
+  /*
+   * Shared button shell. Hover states are plain state changes with no
+   * transition declared — the properties that would animate are isolated here,
+   * so adding motion later is a one-rule change.
+   */
+  .nivo-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    text-align: center;
+  }
+
+  .nivo-btn-primary {
+    background-color: var(--color-nivo-navy);
+    border-color: var(--color-nivo-navy);
+    color: var(--color-nivo-text-inverse);
+  }
+
+  .nivo-btn-primary:hover {
+    border-color: var(--color-nivo-gold);
+  }
+
+  .nivo-btn-secondary {
+    background-color: transparent;
+    border-color: var(--color-nivo-border-strong);
+    color: var(--color-nivo-navy);
+  }
+
+  .nivo-btn-secondary:hover {
+    border-color: var(--color-nivo-navy);
+  }
+
+  .nivo-btn-disabled {
+    background-color: var(--color-nivo-surface);
+    border-color: var(--color-nivo-border);
+    color: var(--color-nivo-text-muted);
+  }
+
+  /* Short gold rule used to mark section and division headings. */
+  .nivo-rule::before {
+    content: '';
+    display: block;
+    width: 2.5rem;
+    height: 2px;
+    margin-bottom: 1.25rem;
+    background-color: var(--color-nivo-gold);
+  }
+}

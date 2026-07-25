@@ -1,0 +1,46 @@
+---
+import { siteConfig } from '../config/site';
+
+// The Contact entry is promoted to the CTA button, so it is filtered out of
+// the main list to avoid rendering the same destination twice.
+const CTA_HREF = '#contact';
+
+const navItems = siteConfig.nav.filter((item) => item.href !== CTA_HREF);
+const cta = siteConfig.nav.find((item) => item.href === CTA_HREF);
+---
+
+<header class="border-b border-nivo-border bg-nivo-background">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-8 px-6 py-5">
+    {/* Logo area — gold keyline stands in for NIVO artwork, wordmark from config. */}
+    <a class="flex items-center gap-3" href="/">
+      <span class="block h-6 w-[3px] bg-nivo-gold" aria-hidden="true"></span>
+      <span class="text-xl font-semibold tracking-tight text-nivo-navy">
+        {siteConfig.name}
+      </span>
+    </a>
+
+    <nav aria-label="Main">
+      <ul class="flex items-center gap-8 text-sm">
+        {
+          navItems.map((item) => (
+            <li>
+              <a class="font-medium text-nivo-text-muted hover:text-nivo-navy" href={item.href}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+
+        {
+          cta && (
+            <li>
+              <a class="nivo-btn nivo-btn-primary" href={cta.href}>
+                {cta.label}
+              </a>
+            </li>
+          )
+        }
+      </ul>
+    </nav>
+  </div>
+</header>

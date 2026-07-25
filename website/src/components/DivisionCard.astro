@@ -1,0 +1,46 @@
+---
+import type { Division } from '../config/site';
+
+interface Props {
+  division: Division;
+}
+
+const { division } = Astro.props;
+---
+
+{/* hover:border-nivo-gold is a plain state change — no transition declared. */}
+<article
+  class="flex flex-col border border-nivo-border bg-nivo-background p-8 hover:border-nivo-gold"
+>
+  <h3 class="nivo-rule text-xl font-semibold tracking-tight text-nivo-navy">
+    {division.name}
+  </h3>
+
+  <p class="mt-2 text-lg text-nivo-text-muted" lang="ar" dir="rtl">
+    {division.nameAr}
+  </p>
+
+  <p class="mt-4 flex-1 text-nivo-text-muted">{division.description}</p>
+
+  {
+    /* A division without a live site gets a disabled control rather than a
+       dead link — an <a> without href is not focusable or announced. */
+  }
+  <div class="mt-8">
+    {
+      division.url ? (
+        <a
+          class="nivo-btn nivo-btn-secondary w-full sm:w-auto"
+          href={division.url}
+          aria-label={`Visit the ${division.name} website`}
+        >
+          Visit Website
+        </a>
+      ) : (
+        <button class="nivo-btn nivo-btn-disabled w-full sm:w-auto" type="button" disabled>
+          Coming Soon
+        </button>
+      )
+    }
+  </div>
+</article>

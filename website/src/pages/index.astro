@@ -1,17 +1,79 @@
 ---
-import '../styles/global.css';
+import DivisionCard from '../components/DivisionCard.astro';
+import { siteConfig } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
-  </head>
-  <body>
-    <h1>Astro</h1>
-  </body>
-</html>
+<BaseLayout>
+  <!-- Hero Section -->
+  <section id="hero" class="bg-nivo-background">
+    <div class="mx-auto max-w-6xl px-6 py-24 sm:py-32">
+      <h1 class="nivo-rule max-w-4xl text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+        {siteConfig.name}
+      </h1>
+
+      <p class="mt-8 max-w-2xl text-xl text-nivo-text sm:text-2xl">
+        {siteConfig.philosophy}
+      </p>
+
+      <p class="mt-4 max-w-2xl text-lg text-nivo-text-muted sm:text-xl" lang="ar" dir="rtl">
+        {siteConfig.taglineAr}
+      </p>
+
+      <div class="mt-12 flex flex-col gap-4 sm:flex-row">
+        <a class="nivo-btn nivo-btn-primary" href="#divisions"> Explore Divisions </a>
+
+        <a class="nivo-btn nivo-btn-secondary" href="#contact"> Contact Us </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="border-y border-nivo-border bg-nivo-surface">
+    <div class="mx-auto max-w-6xl px-6 py-20">
+      <h2 class="nivo-rule text-2xl font-semibold tracking-tight sm:text-3xl">
+        About {siteConfig.name}
+      </h2>
+
+      <p class="mt-6 max-w-prose text-lg text-nivo-text-muted">
+        {siteConfig.description}
+      </p>
+    </div>
+  </section>
+
+  <!-- Divisions Section -->
+  <section id="divisions" class="bg-nivo-background">
+    <div class="mx-auto max-w-6xl px-6 py-20">
+      <h2 class="nivo-rule text-2xl font-semibold tracking-tight sm:text-3xl">Our Divisions</h2>
+
+      <p class="mt-6 max-w-prose text-lg text-nivo-text-muted">
+        Each division operates in its own field while sharing the standards, expertise, and vision
+        of {siteConfig.name}.
+      </p>
+
+      <div class="mt-12 grid gap-8 sm:grid-cols-2">
+        {siteConfig.divisions.map((division) => <DivisionCard division={division} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="border-t border-nivo-border bg-nivo-surface">
+    <div class="mx-auto max-w-6xl px-6 py-20">
+      <div class="max-w-2xl">
+        <h2 class="nivo-rule text-2xl font-semibold tracking-tight sm:text-3xl">
+          Work with {siteConfig.name}
+        </h2>
+
+        <p class="mt-6 text-lg text-nivo-text-muted">
+          Tell us what your organization is working toward, and we will connect you with the
+          division best suited to support your goals.
+        </p>
+
+        <div class="mt-10">
+          <a class="nivo-btn nivo-btn-primary" href="#contact"> Contact Us </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
