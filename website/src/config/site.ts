@@ -1,15 +1,41 @@
 /**
- * Single source of truth for NIVO Group information.
+ * Composition root for site data.
  *
- * All brand, company, and navigation data should originate here.
- * Components and pages consume this configuration instead of hardcoding
- * business information.
+ * Content now lives in src/content/ — this file assembles it and holds the
+ * genuinely configuration-shaped values (canonical URL, SEO defaults, brand
+ * colors).
+ *
+ * `siteConfig` keeps the exact shape components already consume, so this
+ * reorganization required no component changes. Import from here for anything
+ * a page renders; import from src/content/ directly when you need the richer
+ * model (division status, services, localized fields).
  */
 
-export interface NavItem {
-  label: string;
-  href: string;
-}
+import { company, type ApproachPrinciple, type ContactDetails } from '../content/company';
+import { activeDivisions, divisions as allDivisions, type Division } from '../content/divisions';
+import { legal, nav, type NavItem } from '../content/navigation';
+
+export type { ApproachPrinciple, ContactDetails, Division, NavItem };
+
+// Re-exported so pages can reach the full model without a second import path.
+export { allDivisions };
+export { services, getServicesForDivision, type Service } from '../content/services';
+export {
+  getDivision,
+  getDivisionBySlug,
+  legalNameOf,
+  legalNameArOf,
+  type DivisionId,
+  type DivisionStatus,
+} from '../content/divisions';
+export {
+  DEFAULT_LOCALE,
+  LOCALES,
+  LOCALE_DIRECTION,
+  hasContent,
+  type Locale,
+  type Localized,
+} from '../content/i18n';
 
 export interface BrandColors {
   /** Primary brand color */
@@ -19,11 +45,22 @@ export interface BrandColors {
   gold: string;
 }
 
-export interface Division {
-  name: string;
-  nameAr: string;
-  description: string;
-  url: string | null;
+export interface SeoConfig {
+  /** Home page <title>. Inner pages render "Page Title | NIVO Group". */
+  defaultTitle: string;
+
+  /** Meta and OpenGraph description. Kept under 160 characters. */
+  metaDescription: string;
+
+  /** BCP-47 locale of the site's primary language. */
+  locale: string;
+
+  /**
+   * Site-root-relative path to the OpenGraph share image, or null until the
+   * artwork exists. Null suppresses the og:image tag and downgrades the
+   * Twitter card to `summary`, so the site never advertises a broken preview.
+   */
+  ogImage: string | null;
 }
 
 export interface SiteConfig {
@@ -36,64 +73,69 @@ export interface SiteConfig {
   philosophy: string;
   taglineAr: string;
 
+  heroIntro: string;
+
+  /** Footer signature line. */
+  signature: string;
+
   colors: BrandColors;
+
+  seo: SeoConfig;
 
   nav: readonly NavItem[];
 
+  /** Secondary footer-only links. Never shown in the header. */
+  legal: readonly NavItem[];
+
+  approach: readonly ApproachPrinciple[];
+
+  /**
+   * Public divisions only. Divisions with status other than 'active' are
+   * modeled in src/content/divisions.ts but never rendered — use
+   * `allDivisions` to reach them.
+   */
   divisions: readonly Division[];
+
+  contact: ContactDetails;
 }
 
 export const siteConfig: SiteConfig = {
-  name: 'NIVO Group',
-  nameAr: 'مجموعة نيفو',
+  name: company.name,
+  nameAr: company.nameAr,
+  url: company.url,
 
-  url: 'https://nivogroup.ly',
+  description: company.description,
 
-  description:
-    'NIVO Group is a diversified organization focused on building businesses, delivering strategic solutions, and creating sustainable value through expertise and innovation.',
+  philosophy: company.philosophy,
+  taglineAr: company.taglineAr,
 
-  philosophy: 'Connecting expertise, innovation, and opportunity to create lasting value.',
+  heroIntro: company.heroIntro,
 
-  taglineAr: 'نربط الخبرة والابتكار والفرص لصناعة قيمة مستدامة',
+  signature: company.signature,
 
   colors: {
     navy: '#0B1F3A',
     gold: '#C8A951',
   },
 
-  nav: [
-    {
-      label: 'About',
-      href: '#about',
-    },
-    {
-      label: 'Divisions',
-      href: '#divisions',
-    },
-    {
-      label: 'Contact',
-      href: '#contact',
-    },
-  ],
-  divisions: [
-    {
-      name: 'NIVO Advisory Solutions',
-      nameAr: 'نيفو للخدمات الاستشارية',
+  seo: {
+    defaultTitle: 'NIVO Group | Advisory and Technology Divisions',
 
-      description:
-        'Strategic consulting and business advisory solutions designed to improve performance and support growth.',
+    metaDescription:
+      'NIVO Group is a strategic group of specialized divisions in advisory and technology, supporting organizations with growth and operational excellence.',
 
-      url: 'https://advisory.nivogroup.ly',
-    },
+    locale: 'en',
 
-    {
-      name: 'NIVO IT Services',
-      nameAr: 'نيفو لتقنية المعلومات',
+    // No approved share artwork yet — see README for the required asset.
+    ogImage: null,
+  },
 
-      description:
-        'Technology solutions, digital transformation, and modern IT services for organizations.',
+  nav,
+  legal,
 
-      url: 'https://it.nivogroup.ly',
-    },
-  ],
+  approach: company.approach,
+
+  divisions: activeDivisions,
+
+  contact: company.contact,
 };

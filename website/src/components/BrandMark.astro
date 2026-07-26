@@ -1,0 +1,40 @@
+---
+import { siteConfig } from '../config/site';
+
+interface Props {
+  /** Renders light-on-navy, for the footer and other dark surfaces. */
+  inverse?: boolean;
+
+  /** Accessible/visible name. Defaults to the configured group name. */
+  label?: string;
+}
+
+const { inverse = false, label = siteConfig.name } = Astro.props;
+---
+
+{
+  /*
+   * LOGO SWAP POINT
+   *
+   * Everything inside this wrapper is placeholder: a gold keyline plus the
+   * wordmark, standing in for the NIVO mark. To adopt real artwork, replace
+   * only the two spans below with the SVG and keep the contract intact:
+   *
+   *   - honour `inverse` for dark surfaces (navy footer)
+   *   - expose `label` as <title> inside the <svg role="img">
+   *
+   * Header and Footer consume this component and need no changes.
+   */
+}
+<span class="flex items-center gap-3">
+  <span class="block h-6 w-[3px] bg-nivo-gold" aria-hidden="true"></span>
+
+  <span
+    class:list={[
+      'text-xl font-semibold tracking-tight',
+      inverse ? 'text-nivo-text-inverse' : 'text-nivo-navy',
+    ]}
+  >
+    {label}
+  </span>
+</span>

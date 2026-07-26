@@ -1,48 +1,29 @@
 ---
+import BrandMark from './BrandMark.astro';
 import { siteConfig } from '../config/site';
 
 // Baked at build time; static output has no request-time clock.
 const year = new Date().getFullYear();
+
+const columns = [
+  { heading: 'Explore', items: siteConfig.nav },
+  { heading: 'Legal', items: siteConfig.legal },
+];
 ---
 
 <footer class="nivo-on-navy bg-nivo-navy text-nivo-text-inverse-muted">
   <div class="mx-auto max-w-6xl px-6 py-16">
-    <div class="flex flex-col gap-12 sm:flex-row sm:justify-between">
+    <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
       <div>
-        <div class="flex items-center gap-3">
-          <span class="block h-6 w-[3px] bg-nivo-gold" aria-hidden="true"></span>
-          <p class="text-xl font-semibold tracking-tight text-nivo-text-inverse">
-            {siteConfig.name}
-          </p>
-        </div>
+        <BrandMark inverse />
 
         <p class="mt-2 text-lg text-nivo-text-inverse" lang="ar" dir="rtl">
           {siteConfig.nameAr}
         </p>
 
         <p class="mt-4 max-w-sm text-sm">{siteConfig.philosophy}</p>
-      </div>
 
-      <nav aria-label="Footer">
-        <p class="text-xs font-semibold tracking-[0.15em] text-nivo-text-inverse uppercase">
-          Explore
-        </p>
-
-        <ul class="mt-5 flex flex-col gap-3 text-sm">
-          {
-            siteConfig.nav.map((item) => (
-              <li>
-                <a class="hover:text-nivo-gold" href={item.href}>
-                  {item.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
-
-      <div>
-        <p class="text-xs font-semibold tracking-[0.15em] text-nivo-text-inverse uppercase">
+        <p class="mt-8 text-xs font-semibold tracking-[0.15em] text-nivo-text-inverse uppercase">
           Follow
         </p>
 
@@ -50,7 +31,7 @@ const year = new Date().getFullYear();
           /* Reserved for social profiles — no accounts published yet, so these
             are inert placeholders rather than invented links. */
         }
-        <ul class="mt-5 flex gap-3">
+        <ul class="mt-4 flex gap-3">
           {
             ['one', 'two', 'three'].map((slot) => (
               <li>
@@ -64,13 +45,55 @@ const year = new Date().getFullYear();
           }
         </ul>
       </div>
+
+      {
+        columns.map((column) => (
+          <nav aria-label={column.heading}>
+            <p class="text-xs font-semibold tracking-[0.15em] text-nivo-text-inverse uppercase">
+              {column.heading}
+            </p>
+
+            <ul class="mt-5 flex flex-col gap-3 text-sm">
+              {column.items.map((item) => (
+                <li>
+                  <a class="hover:text-nivo-gold" href={item.href}>
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))
+      }
+
+      <nav aria-label="Divisions">
+        <p class="text-xs font-semibold tracking-[0.15em] text-nivo-text-inverse uppercase">
+          Divisions
+        </p>
+
+        <ul class="mt-5 flex flex-col gap-3 text-sm">
+          {
+            siteConfig.divisions.map((division) => (
+              <li>
+                {division.url ? (
+                  <a class="hover:text-nivo-gold" href={division.url}>
+                    {division.name}
+                  </a>
+                ) : (
+                  <span>{division.name}</span>
+                )}
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
     </div>
 
     <div
       class="mt-14 flex flex-col gap-3 border-t border-nivo-text-inverse-muted/20 pt-8 text-sm sm:flex-row sm:justify-between"
     >
       <p>&copy; {year} {siteConfig.name}. All rights reserved.</p>
-      <p>Built by NIVO</p>
+      <p>{siteConfig.signature}</p>
     </div>
   </div>
 </footer>

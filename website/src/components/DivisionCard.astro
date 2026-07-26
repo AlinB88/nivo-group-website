@@ -12,15 +12,17 @@ const { division } = Astro.props;
 <article
   class="flex flex-col border border-nivo-border bg-nivo-background p-8 hover:border-nivo-gold"
 >
-  <h3 class="nivo-rule text-xl font-semibold tracking-tight text-nivo-navy">
-    {division.name}
-  </h3>
+  <header>
+    <h3 class="nivo-rule text-xl font-semibold tracking-tight text-nivo-navy">
+      {division.name}
+    </h3>
 
-  <p class="mt-2 text-lg text-nivo-text-muted" lang="ar" dir="rtl">
-    {division.nameAr}
-  </p>
+    <p class="mt-2 text-base text-nivo-text-muted" lang="ar" dir="rtl">
+      {division.nameAr}
+    </p>
+  </header>
 
-  <p class="mt-4 flex-1 text-nivo-text-muted">{division.description}</p>
+  <p class="mt-5 flex-1 text-nivo-text-muted">{division.description}</p>
 
   {
     /* A division without a live site gets a disabled control rather than a

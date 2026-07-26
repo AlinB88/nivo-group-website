@@ -1,25 +1,21 @@
 ---
+import BrandMark from './BrandMark.astro';
 import { siteConfig } from '../config/site';
 
-// The Contact entry is promoted to the CTA button, so it is filtered out of
-// the main list to avoid rendering the same destination twice.
-const CTA_HREF = '#contact';
-
-const navItems = siteConfig.nav.filter((item) => item.href !== CTA_HREF);
-const cta = siteConfig.nav.find((item) => item.href === CTA_HREF);
+// The CTA is flagged in config rather than matched on href, so changing the
+// contact destination never silently duplicates it in the nav list.
+const navItems = siteConfig.nav.filter((item) => !item.cta);
+const cta = siteConfig.nav.find((item) => item.cta);
 ---
 
-<header class="border-b border-nivo-border bg-nivo-background">
+<header class="relative border-b border-nivo-border bg-nivo-background">
   <div class="mx-auto flex max-w-6xl items-center justify-between gap-8 px-6 py-5">
-    {/* Logo area — gold keyline stands in for NIVO artwork, wordmark from config. */}
-    <a class="flex items-center gap-3" href="/">
-      <span class="block h-6 w-[3px] bg-nivo-gold" aria-hidden="true"></span>
-      <span class="text-xl font-semibold tracking-tight text-nivo-navy">
-        {siteConfig.name}
-      </span>
+    <a href="/">
+      <BrandMark />
     </a>
 
-    <nav aria-label="Main">
+    {/* Desktop navigation */}
+    <nav class="hidden sm:block" aria-label="Main">
       <ul class="flex items-center gap-8 text-sm">
         {
           navItems.map((item) => (
@@ -42,5 +38,48 @@ const cta = siteConfig.nav.find((item) => item.href === CTA_HREF);
         }
       </ul>
     </nav>
+
+    {
+      /*
+      Mobile navigation. <details> gives a native disclosure widget — focusable,
+      toggled by Enter/Space, and state announced by screen readers — with no
+      JavaScript, so the menu still works if scripts fail. The panel is absolute
+      so opening it does not change the header's height.
+    */
+    }
+    <details class="sm:hidden">
+      <summary
+        class="cursor-pointer list-none py-2 text-sm font-medium text-nivo-navy [&::-webkit-details-marker]:hidden"
+      >
+        Menu
+      </summary>
+
+      <nav
+        class="absolute inset-x-0 top-full z-10 border-b border-nivo-border bg-nivo-background px-6 pb-6"
+        aria-label="Main"
+      >
+        <ul class="flex flex-col gap-1 text-sm">
+          {
+            navItems.map((item) => (
+              <li>
+                <a class="block py-3 font-medium text-nivo-text-muted" href={item.href}>
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+
+          {
+            cta && (
+              <li class="pt-3">
+                <a class="nivo-btn nivo-btn-primary w-full" href={cta.href}>
+                  {cta.label}
+                </a>
+              </li>
+            )
+          }
+        </ul>
+      </nav>
+    </details>
   </div>
 </header>
