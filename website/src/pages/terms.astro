@@ -1,0 +1,52 @@
+---
+import PageHero from '../components/PageHero.astro';
+import { siteConfig } from '../config/site';
+import { getPage, getPageDescription } from '../content/pages';
+import { getSectionOfKind } from '../content/sections';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const SLUG = '/terms';
+
+const title = getPage(SLUG)?.title ?? '';
+
+// The hero intro and the meta description are the same sentence — sourced once
+// from the registry so they cannot drift apart.
+const intro = getPageDescription(SLUG);
+
+const contactHref = siteConfig.nav.find((item) => item.cta)?.href ?? '/contact';
+
+// Notice and clauses are owned by content/sections.ts — this file only places them.
+const legal = getSectionOfKind('terms.body', 'legal');
+---
+
+<BaseLayout slug={SLUG}>
+  <PageHero title={title} intro={intro} />
+
+  <section class="border-y border-nivo-border bg-nivo-surface">
+    <div class="mx-auto max-w-6xl px-6 py-20">
+      <div class="max-w-prose">
+        <p class="border-l-2 border-nivo-gold pl-4 text-sm text-nivo-text-muted italic">
+          {legal?.notice.en}
+        </p>
+
+        <div class="mt-12 flex flex-col gap-10">
+          {
+            legal?.clauses.map((clause) => (
+              <section>
+                <h2 class="text-lg font-semibold tracking-tight text-nivo-navy">
+                  {clause.heading.en}
+                </h2>
+
+                <p class="mt-3 text-nivo-text-muted">{clause.body.en}</p>
+              </section>
+            ))
+          }
+        </div>
+
+        <div class="mt-12">
+          <a class="nivo-btn nivo-btn-secondary" href={contactHref}> Contact Us </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

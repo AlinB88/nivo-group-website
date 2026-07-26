@@ -1,29 +1,47 @@
 ---
+import ApproachCard from '../components/ApproachCard.astro';
 import DivisionCard from '../components/DivisionCard.astro';
 import { siteConfig } from '../config/site';
+import { getSectionOfKind } from '../content/sections';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const SLUG = '/';
+
+// Body copy is owned by content/sections.ts — this file only places it.
+const hero = getSectionOfKind('home.hero', 'hero');
+const about = getSectionOfKind('home.about', 'text');
+const approach = getSectionOfKind('home.approach', 'text');
+const divisions = getSectionOfKind('home.divisions', 'text');
+const contact = getSectionOfKind('home.contact', 'cta');
+
+const [exploreCta, contactCta] = hero?.links ?? [];
+const cta = contact?.link;
 ---
 
-<BaseLayout>
+<BaseLayout slug={SLUG}>
   <!-- Hero Section -->
   <section id="hero" class="bg-nivo-background">
     <div class="mx-auto max-w-6xl px-6 py-24 sm:py-32">
       <h1 class="nivo-rule max-w-4xl text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-        {siteConfig.name}
+        {hero?.headline.en}
       </h1>
 
       <p class="mt-8 max-w-2xl text-xl text-nivo-text sm:text-2xl">
-        {siteConfig.philosophy}
+        {hero?.subheadline.en}
       </p>
 
       <p class="mt-4 max-w-2xl text-lg text-nivo-text-muted sm:text-xl" lang="ar" dir="rtl">
-        {siteConfig.taglineAr}
+        {hero?.subheadline.ar}
+      </p>
+
+      <p class="mt-8 max-w-2xl text-nivo-text-muted">
+        {hero?.intro.en}
       </p>
 
       <div class="mt-12 flex flex-col gap-4 sm:flex-row">
-        <a class="nivo-btn nivo-btn-primary" href="#divisions"> Explore Divisions </a>
+        <a class="nivo-btn nivo-btn-primary" href={exploreCta?.href}> {exploreCta?.label.en} </a>
 
-        <a class="nivo-btn nivo-btn-secondary" href="#contact"> Contact Us </a>
+        <a class="nivo-btn nivo-btn-secondary" href={contactCta?.href}> {contactCta?.label.en} </a>
       </div>
     </div>
   </section>
@@ -32,24 +50,48 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section id="about" class="border-y border-nivo-border bg-nivo-surface">
     <div class="mx-auto max-w-6xl px-6 py-20">
       <h2 class="nivo-rule text-2xl font-semibold tracking-tight sm:text-3xl">
-        About {siteConfig.name}
+        {about?.heading.en}
       </h2>
 
-      <p class="mt-6 max-w-prose text-lg text-nivo-text-muted">
-        {siteConfig.description}
-      </p>
+      {
+        about?.body.map((paragraph) => (
+          <p class="mt-6 max-w-prose text-lg text-nivo-text-muted">{paragraph.en}</p>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Our Approach Section -->
+  <section id="approach" class="bg-nivo-background">
+    <div class="mx-auto max-w-6xl px-6 py-20">
+      <h2 class="nivo-rule text-2xl font-semibold tracking-tight sm:text-3xl">
+        {approach?.heading.en}
+      </h2>
+
+      {
+        approach?.body.map((paragraph) => (
+          <p class="mt-6 max-w-prose text-lg text-nivo-text-muted">{paragraph.en}</p>
+        ))
+      }
+
+      <div class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {siteConfig.approach.map((principle) => <ApproachCard principle={principle} />)}
+      </div>
     </div>
   </section>
 
   <!-- Divisions Section -->
-  <section id="divisions" class="bg-nivo-background">
+  <section id="divisions" class="border-y border-nivo-border bg-nivo-surface">
     <div class="mx-auto max-w-6xl px-6 py-20">
-      <h2 class="nivo-rule text-2xl font-semibold tracking-tight sm:text-3xl">Our Divisions</h2>
+      <h2 class="nivo-rule text-2xl font-semibold tracking-tight sm:text-3xl">
+        {divisions?.heading.en}
+      </h2>
 
-      <p class="mt-6 max-w-prose text-lg text-nivo-text-muted">
-        Each division operates in its own field while sharing the standards, expertise, and vision
-        of {siteConfig.name}.
-      </p>
+      {
+        divisions?.body.map((paragraph) => (
+          <p class="mt-6 max-w-prose text-lg text-nivo-text-muted">{paragraph.en}</p>
+        ))
+      }
 
       <div class="mt-12 grid gap-8 sm:grid-cols-2">
         {siteConfig.divisions.map((division) => <DivisionCard division={division} />)}
@@ -57,21 +99,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
   </section>
 
-  <!-- Contact Section -->
-  <section id="contact" class="border-t border-nivo-border bg-nivo-surface">
+  <!-- Contact CTA Section -->
+  <section id="contact" class="bg-nivo-background">
     <div class="mx-auto max-w-6xl px-6 py-20">
       <div class="max-w-2xl">
         <h2 class="nivo-rule text-2xl font-semibold tracking-tight sm:text-3xl">
-          Work with {siteConfig.name}
+          {contact?.heading.en}
         </h2>
 
         <p class="mt-6 text-lg text-nivo-text-muted">
-          Tell us what your organization is working toward, and we will connect you with the
-          division best suited to support your goals.
+          {contact?.body.en}
         </p>
 
         <div class="mt-10">
-          <a class="nivo-btn nivo-btn-primary" href="#contact"> Contact Us </a>
+          <a class="nivo-btn nivo-btn-primary" href={cta?.href}> {cta?.label.en} </a>
         </div>
       </div>
     </div>

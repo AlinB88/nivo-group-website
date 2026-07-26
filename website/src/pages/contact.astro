@@ -1,0 +1,130 @@
+---
+import PageHero from '../components/PageHero.astro';
+import { siteConfig } from '../config/site';
+import { getSectionOfKind } from '../content/sections';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const { email, phone, location } = siteConfig.contact;
+
+// Null fields render a "To be provided" empty state — no address, number, or
+// office is invented. Filling the value in site.ts activates the link.
+const details = [
+  {
+    label: 'Email',
+    value: email,
+    href: email ? `mailto:${email}` : null,
+  },
+  {
+    label: 'Phone',
+    value: phone,
+    href: phone ? `tel:${phone.replace(/\s+/g, '')}` : null,
+  },
+  {
+    label: 'Location',
+    value: location,
+    href: null,
+  },
+];
+
+const hasAnyDetail = details.some((detail) => detail.value);
+
+// Body copy is owned by content/sections.ts — this file only places it.
+const hero = getSectionOfKind('contact.hero', 'hero');
+const groupContact = getSectionOfKind('contact.details', 'text');
+const divisionRouting = getSectionOfKind('contact.divisions', 'text');
+---
+
+<BaseLayout slug="/contact">
+  <PageHero title={hero?.headline.en ?? ''} intro={hero?.intro.en} />
+
+  <section class="border-y border-nivo-border bg-nivo-surface">
+    <div class="mx-auto max-w-6xl px-6 py-20">
+      <h2 class="nivo-rule text-2xl font-semibold tracking-tight sm:text-3xl">
+        {groupContact?.heading.en}
+      </h2>
+
+      {
+        !hasAnyDetail &&
+          groupContact?.body.map((paragraph) => (
+            <p class="mt-6 max-w-prose text-nivo-text-muted">{paragraph.en}</p>
+          ))
+      }
+
+      <dl class="mt-10 grid gap-8 sm:grid-cols-3">
+        {
+          details.map((detail) => (
+            <div class="border-t border-nivo-border pt-6">
+              <dt class="text-xs font-semibold tracking-[0.15em] text-nivo-navy uppercase">
+                {detail.label}
+              </dt>
+
+              <dd class="mt-3 text-nivo-text-muted">
+                {detail.value ? (
+                  detail.href ? (
+                    <a class="hover:text-nivo-navy" href={detail.href}>
+                      {detail.value}
+                    </a>
+                  ) : (
+                    detail.value
+                  )
+                ) : (
+                  <span class="italic">To be provided</span>
+                )}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="bg-nivo-background">
+    <div class="mx-auto max-w-6xl px-6 py-20">
+      <h2 class="nivo-rule text-2xl font-semibold tracking-tight sm:text-3xl">
+        {divisionRouting?.heading.en}
+      </h2>
+
+      {
+        divisionRouting?.body.map((paragraph) => (
+          <p class="mt-6 max-w-prose text-lg text-nivo-text-muted">{paragraph.en}</p>
+        ))
+      }
+
+      <div class="mt-12 grid gap-8 sm:grid-cols-2">
+        {
+          siteConfig.divisions.map((division) => (
+            <article class="flex flex-col border border-nivo-border p-8">
+              <h3 class="text-lg font-semibold tracking-tight text-nivo-navy">{division.name}</h3>
+
+              <p class="mt-2 text-base text-nivo-text-muted" lang="ar" dir="rtl">
+                {division.nameAr}
+              </p>
+
+              <p class="mt-4 flex-1 text-sm text-nivo-text-muted">{division.description}</p>
+
+              <div class="mt-8">
+                {division.url ? (
+                  <a
+                    class="nivo-btn nivo-btn-secondary w-full sm:w-auto"
+                    href={division.url}
+                    aria-label={`Visit the ${division.name} website`}
+                  >
+                    Visit Website
+                  </a>
+                ) : (
+                  <button
+                    class="nivo-btn nivo-btn-disabled w-full sm:w-auto"
+                    type="button"
+                    disabled
+                  >
+                    Coming Soon
+                  </button>
+                )}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
