@@ -10,10 +10,10 @@ const { division } = Astro.props;
 
 {/* hover:border-nivo-gold is a plain state change — no transition declared. */}
 <article
-  class="flex flex-col border border-nivo-border bg-nivo-background p-8 hover:border-nivo-gold"
+  class="nivo-card flex min-h-[22rem] flex-col border border-nivo-border bg-nivo-background p-8 sm:p-10"
 >
   <header>
-    <h3 class="nivo-rule text-xl font-semibold tracking-tight text-nivo-navy">
+    <h3 class="nivo-rule text-2xl text-nivo-navy">
       {division.name}
     </h3>
 
@@ -22,19 +22,21 @@ const { division } = Astro.props;
     </p>
   </header>
 
-  <p class="mt-5 flex-1 text-nivo-text-muted">{division.description}</p>
+  <p class="mt-6 flex-1 leading-7 text-nivo-text-muted">{division.description}</p>
 
   {
     /* A division without a live site gets a disabled control rather than a
        dead link — an <a> without href is not focusable or announced. */
   }
-  <div class="mt-8">
+  <div class="mt-10">
     {
       division.url ? (
         <a
           class="nivo-btn nivo-btn-secondary w-full sm:w-auto"
           href={division.url}
           aria-label={`Visit the ${division.name} website`}
+          target="_blank"
+          rel="noreferrer"
         >
           Visit Website
         </a>

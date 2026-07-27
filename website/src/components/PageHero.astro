@@ -7,12 +7,18 @@ interface Props {
 const { title, intro } = Astro.props;
 ---
 
-<section class="bg-nivo-background">
-  <div class="mx-auto max-w-6xl px-6 py-20 sm:py-28">
-    <h1 class="nivo-rule max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">
+<section class="nivo-hero-field nivo-on-navy">
+  <div class="nivo-container py-20 sm:py-28 lg:py-32">
+    <h1 class="nivo-rule max-w-3xl text-4xl text-nivo-text-inverse sm:text-5xl">
       {title}
     </h1>
 
-    {intro && <p class="mt-8 max-w-2xl text-lg text-nivo-text-muted">{intro}</p>}
+    {
+      intro && (
+        <p class="mt-8 max-w-2xl text-lg leading-8 text-nivo-text-inverse-muted sm:text-xl">
+          {intro}
+        </p>
+      )
+    }
   </div>
 </section>

@@ -11,9 +11,9 @@ const columns = [
 ];
 ---
 
-<footer class="nivo-on-navy bg-nivo-navy text-nivo-text-inverse-muted">
-  <div class="mx-auto max-w-6xl px-6 py-16">
-    <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+<footer class="nivo-on-navy border-t-2 border-nivo-gold bg-nivo-navy text-nivo-text-inverse-muted">
+  <div class="nivo-container py-16 sm:py-20">
+    <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.5fr_0.75fr_0.75fr_1fr]">
       <div>
         <BrandMark inverse />
 
@@ -21,7 +21,7 @@ const columns = [
           {siteConfig.nameAr}
         </p>
 
-        <p class="mt-4 max-w-sm text-sm">{siteConfig.philosophy}</p>
+        <p class="mt-5 max-w-sm text-sm leading-7">{siteConfig.philosophy}</p>
 
         <p class="mt-8 text-xs font-semibold tracking-[0.15em] text-nivo-text-inverse uppercase">
           Follow
@@ -36,7 +36,7 @@ const columns = [
             ['one', 'two', 'three'].map((slot) => (
               <li>
                 <span
-                  class="block size-9 border border-nivo-text-inverse-muted/30"
+                  class="block size-9 border border-nivo-text-inverse-muted/30 transition-colors hover:border-nivo-gold"
                   data-social-placeholder={slot}
                   aria-hidden="true"
                 />
@@ -49,14 +49,14 @@ const columns = [
       {
         columns.map((column) => (
           <nav aria-label={column.heading}>
-            <p class="text-xs font-semibold tracking-[0.15em] text-nivo-text-inverse uppercase">
+            <p class="text-xs font-bold tracking-[0.15em] text-nivo-text-inverse uppercase">
               {column.heading}
             </p>
 
             <ul class="mt-5 flex flex-col gap-3 text-sm">
               {column.items.map((item) => (
                 <li>
-                  <a class="hover:text-nivo-gold" href={item.href}>
+                  <a class="transition-colors hover:text-nivo-gold" href={item.href}>
                     {item.label}
                   </a>
                 </li>
@@ -67,7 +67,7 @@ const columns = [
       }
 
       <nav aria-label="Divisions">
-        <p class="text-xs font-semibold tracking-[0.15em] text-nivo-text-inverse uppercase">
+        <p class="text-xs font-bold tracking-[0.15em] text-nivo-text-inverse uppercase">
           Divisions
         </p>
 
@@ -76,7 +76,12 @@ const columns = [
             siteConfig.divisions.map((division) => (
               <li>
                 {division.url ? (
-                  <a class="hover:text-nivo-gold" href={division.url}>
+                  <a
+                    class="transition-colors hover:text-nivo-gold"
+                    href={division.url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     {division.name}
                   </a>
                 ) : (

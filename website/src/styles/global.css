@@ -20,6 +20,8 @@
   /* Surfaces */
   --color-nivo-background: #ffffff;
   --color-nivo-surface: #f7f8fa;
+  --color-nivo-surface-warm: #fbfaf7;
+  --color-nivo-navy-deep: #07182f;
 
   /* Text — gold is never used for text on light surfaces (2.3:1). */
   --color-nivo-text: #0b1f3a;
@@ -46,7 +48,7 @@
     background-color: var(--color-nivo-background);
     color: var(--color-nivo-text);
     font-family: var(--font-sans);
-    line-height: 1.65;
+    line-height: 1.7;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -60,8 +62,8 @@
   h6 {
     color: var(--color-nivo-navy);
     font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
+    line-height: 1.08;
+    letter-spacing: -0.035em;
     text-wrap: balance;
   }
 
@@ -85,6 +87,10 @@
 
   button:disabled {
     cursor: not-allowed;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   /* Navy meets 3:1 against both white and the light surface token. */
@@ -115,11 +121,18 @@
     align-items: center;
     justify-content: center;
     border: 1px solid transparent;
-    padding: 0.75rem 1.5rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    letter-spacing: 0.01em;
+    min-height: 3rem;
+    padding: 0.75rem 1.35rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
     text-align: center;
+    text-transform: uppercase;
+    transition:
+      background-color 180ms ease,
+      border-color 180ms ease,
+      color 180ms ease,
+      transform 180ms ease;
   }
 
   .nivo-btn-primary {
@@ -129,7 +142,9 @@
   }
 
   .nivo-btn-primary:hover {
-    border-color: var(--color-nivo-gold);
+    background-color: var(--color-nivo-navy-deep);
+    border-color: var(--color-nivo-navy-deep);
+    transform: translateY(-1px);
   }
 
   .nivo-btn-secondary {
@@ -140,6 +155,32 @@
 
   .nivo-btn-secondary:hover {
     border-color: var(--color-nivo-navy);
+    background-color: var(--color-nivo-navy);
+    color: var(--color-nivo-text-inverse);
+    transform: translateY(-1px);
+  }
+
+  .nivo-btn-gold {
+    background-color: var(--color-nivo-gold);
+    border-color: var(--color-nivo-gold);
+    color: var(--color-nivo-navy);
+  }
+
+  .nivo-btn-gold:hover {
+    background-color: var(--color-nivo-text-inverse);
+    border-color: var(--color-nivo-text-inverse);
+    transform: translateY(-1px);
+  }
+
+  .nivo-btn-on-dark {
+    border-color: rgb(255 255 255 / 0.42);
+    color: var(--color-nivo-text-inverse);
+  }
+
+  .nivo-btn-on-dark:hover {
+    border-color: var(--color-nivo-gold);
+    color: var(--color-nivo-gold);
+    transform: translateY(-1px);
   }
 
   .nivo-btn-disabled {
@@ -156,5 +197,131 @@
     height: 2px;
     margin-bottom: 1.25rem;
     background-color: var(--color-nivo-gold);
+  }
+
+  .nivo-container {
+    width: min(100% - 3rem, 76rem);
+    margin-inline: auto;
+  }
+
+  .nivo-section {
+    padding-block: clamp(5rem, 9vw, 8.5rem);
+  }
+
+  .nivo-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--color-nivo-text-muted);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .nivo-eyebrow::before {
+    width: 1.75rem;
+    height: 1px;
+    background: currentColor;
+    content: '';
+  }
+
+  .nivo-on-navy .nivo-eyebrow {
+    color: var(--color-nivo-gold);
+  }
+
+  .nivo-display {
+    font-size: clamp(3.5rem, 8vw, 7.75rem);
+    font-weight: 600;
+    letter-spacing: -0.065em;
+    line-height: 0.94;
+  }
+
+  .nivo-hero-field {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 78% 28%, rgb(200 169 81 / 0.19), transparent 20rem),
+      radial-gradient(circle at 98% 90%, rgb(255 255 255 / 0.07), transparent 28rem),
+      linear-gradient(135deg, var(--color-nivo-navy-deep), var(--color-nivo-navy));
+  }
+
+  .nivo-hero-field::before,
+  .nivo-hero-field::after {
+    position: absolute;
+    z-index: -1;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    content: '';
+    pointer-events: none;
+  }
+
+  .nivo-hero-field::before {
+    width: min(56vw, 46rem);
+    aspect-ratio: 1;
+    top: -16rem;
+    right: -12rem;
+    border-radius: 50%;
+  }
+
+  .nivo-hero-field::after {
+    width: min(45vw, 36rem);
+    aspect-ratio: 1;
+    right: 8%;
+    bottom: -24rem;
+    transform: rotate(45deg);
+  }
+
+  .nivo-card {
+    position: relative;
+    overflow: hidden;
+    transition:
+      border-color 180ms ease,
+      box-shadow 180ms ease,
+      transform 180ms ease;
+  }
+
+  .nivo-card::after {
+    position: absolute;
+    width: 4.5rem;
+    height: 2px;
+    right: -1.5rem;
+    bottom: 1.75rem;
+    background: var(--color-nivo-gold);
+    content: '';
+    transition: transform 180ms ease;
+  }
+
+  .nivo-card:hover {
+    border-color: var(--color-nivo-gold);
+    box-shadow: 0 1.5rem 3.5rem rgb(11 31 58 / 0.08);
+    transform: translateY(-0.25rem);
+  }
+
+  .nivo-card:hover::after {
+    transform: translateX(-1.5rem);
+  }
+
+  .nivo-legal-copy h2 {
+    font-size: 1.25rem;
+  }
+
+  @media (max-width: 639px) {
+    .nivo-container {
+      width: min(100% - 2.5rem, 76rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    .nivo-btn,
+    .nivo-card,
+    .nivo-card::after {
+      transition: none;
+    }
   }
 }

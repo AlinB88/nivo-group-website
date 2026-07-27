@@ -1,4 +1,5 @@
 ---
+import DivisionCard from '../components/DivisionCard.astro';
 import PageHero from '../components/PageHero.astro';
 import { siteConfig } from '../config/site';
 import { getSectionOfKind } from '../content/sections';
@@ -37,24 +38,24 @@ const divisionRouting = getSectionOfKind('contact.divisions', 'text');
 <BaseLayout slug="/contact">
   <PageHero title={hero?.headline.en ?? ''} intro={hero?.intro.en} />
 
-  <section class="border-y border-nivo-border bg-nivo-surface">
-    <div class="mx-auto max-w-6xl px-6 py-20">
-      <h2 class="nivo-rule text-2xl font-semibold tracking-tight sm:text-3xl">
+  <section class="bg-nivo-surface-warm">
+    <div class="nivo-container nivo-section">
+      <h2 class="nivo-rule max-w-2xl text-3xl sm:text-4xl">
         {groupContact?.heading.en}
       </h2>
 
       {
         !hasAnyDetail &&
           groupContact?.body.map((paragraph) => (
-            <p class="mt-6 max-w-prose text-nivo-text-muted">{paragraph.en}</p>
+            <p class="mt-8 max-w-prose text-lg leading-8 text-nivo-text-muted">{paragraph.en}</p>
           ))
       }
 
-      <dl class="mt-10 grid gap-8 sm:grid-cols-3">
+      <dl class="mt-12 grid gap-6 sm:grid-cols-3">
         {
           details.map((detail) => (
-            <div class="border-t border-nivo-border pt-6">
-              <dt class="text-xs font-semibold tracking-[0.15em] text-nivo-navy uppercase">
+            <div class="border-t-2 border-nivo-gold bg-nivo-background p-6 pt-7">
+              <dt class="text-xs font-bold tracking-[0.15em] text-nivo-navy uppercase">
                 {detail.label}
               </dt>
 
@@ -79,51 +80,19 @@ const divisionRouting = getSectionOfKind('contact.divisions', 'text');
   </section>
 
   <section class="bg-nivo-background">
-    <div class="mx-auto max-w-6xl px-6 py-20">
-      <h2 class="nivo-rule text-2xl font-semibold tracking-tight sm:text-3xl">
+    <div class="nivo-container nivo-section">
+      <h2 class="nivo-rule max-w-2xl text-3xl sm:text-4xl">
         {divisionRouting?.heading.en}
       </h2>
 
       {
         divisionRouting?.body.map((paragraph) => (
-          <p class="mt-6 max-w-prose text-lg text-nivo-text-muted">{paragraph.en}</p>
+          <p class="mt-8 max-w-2xl text-lg leading-8 text-nivo-text-muted">{paragraph.en}</p>
         ))
       }
 
-      <div class="mt-12 grid gap-8 sm:grid-cols-2">
-        {
-          siteConfig.divisions.map((division) => (
-            <article class="flex flex-col border border-nivo-border p-8">
-              <h3 class="text-lg font-semibold tracking-tight text-nivo-navy">{division.name}</h3>
-
-              <p class="mt-2 text-base text-nivo-text-muted" lang="ar" dir="rtl">
-                {division.nameAr}
-              </p>
-
-              <p class="mt-4 flex-1 text-sm text-nivo-text-muted">{division.description}</p>
-
-              <div class="mt-8">
-                {division.url ? (
-                  <a
-                    class="nivo-btn nivo-btn-secondary w-full sm:w-auto"
-                    href={division.url}
-                    aria-label={`Visit the ${division.name} website`}
-                  >
-                    Visit Website
-                  </a>
-                ) : (
-                  <button
-                    class="nivo-btn nivo-btn-disabled w-full sm:w-auto"
-                    type="button"
-                    disabled
-                  >
-                    Coming Soon
-                  </button>
-                )}
-              </div>
-            </article>
-          ))
-        }
+      <div class="mt-14 grid gap-6 sm:grid-cols-2">
+        {siteConfig.divisions.map((division) => <DivisionCard division={division} />)}
       </div>
     </div>
   </section>

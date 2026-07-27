@@ -20,99 +20,130 @@ const cta = contact?.link;
 
 <BaseLayout slug={SLUG}>
   <!-- Hero Section -->
-  <section id="hero" class="bg-nivo-background">
-    <div class="mx-auto max-w-6xl px-6 py-24 sm:py-32">
-      <h1 class="nivo-rule max-w-4xl text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-        {hero?.headline.en}
-      </h1>
+  <section id="hero" class="nivo-hero-field nivo-on-navy">
+    <div
+      class="nivo-container grid min-h-[42rem] items-end gap-12 py-20 sm:py-28 lg:min-h-[48rem] lg:grid-cols-[minmax(0,1fr)_18rem] lg:py-32"
+    >
+      <div class="relative z-10">
+        <h1 class="nivo-rule nivo-display max-w-4xl text-nivo-text-inverse">
+          {hero?.headline.en}
+        </h1>
 
-      <p class="mt-8 max-w-2xl text-xl text-nivo-text sm:text-2xl">
-        {hero?.subheadline.en}
-      </p>
+        <p class="mt-10 max-w-2xl text-xl leading-relaxed text-nivo-text-inverse sm:text-2xl">
+          {hero?.subheadline.en}
+        </p>
 
-      <p class="mt-4 max-w-2xl text-lg text-nivo-text-muted sm:text-xl" lang="ar" dir="rtl">
-        {hero?.subheadline.ar}
-      </p>
+        <p class="mt-5 max-w-2xl text-lg text-nivo-gold sm:text-xl" lang="ar" dir="rtl">
+          {hero?.subheadline.ar}
+        </p>
 
-      <p class="mt-8 max-w-2xl text-nivo-text-muted">
-        {hero?.intro.en}
-      </p>
+        <p class="mt-10 max-w-xl text-base leading-8 text-nivo-text-inverse-muted sm:text-lg">
+          {hero?.intro.en}
+        </p>
 
-      <div class="mt-12 flex flex-col gap-4 sm:flex-row">
-        <a class="nivo-btn nivo-btn-primary" href={exploreCta?.href}> {exploreCta?.label.en} </a>
+        <div class="mt-12 flex flex-col gap-4 sm:flex-row">
+          <a class="nivo-btn nivo-btn-gold" href={exploreCta?.href}> {exploreCta?.label.en} </a>
 
-        <a class="nivo-btn nivo-btn-secondary" href={contactCta?.href}> {contactCta?.label.en} </a>
+          <a class="nivo-btn nivo-btn-on-dark" href={contactCta?.href}> {contactCta?.label.en} </a>
+        </div>
+      </div>
+
+      <div
+        class="hidden justify-self-end text-[18rem] leading-none font-semibold tracking-[-0.12em] text-white/[0.035] lg:block"
+        aria-hidden="true"
+      >
+        N
       </div>
     </div>
   </section>
 
   <!-- About Section -->
-  <section id="about" class="border-y border-nivo-border bg-nivo-surface">
-    <div class="mx-auto max-w-6xl px-6 py-20">
-      <h2 class="nivo-rule text-2xl font-semibold tracking-tight sm:text-3xl">
-        {about?.heading.en}
-      </h2>
+  <section id="about" class="bg-nivo-surface-warm">
+    <div
+      class="nivo-container nivo-section grid gap-10 lg:grid-cols-[11rem_minmax(0,1fr)] lg:gap-16"
+    >
+      <span class="nivo-eyebrow" aria-hidden="true">01</span>
+      <div>
+        <h2 class="nivo-rule max-w-2xl text-3xl sm:text-4xl">
+          {about?.heading.en}
+        </h2>
 
-      {
-        about?.body.map((paragraph) => (
-          <p class="mt-6 max-w-prose text-lg text-nivo-text-muted">{paragraph.en}</p>
-        ))
-      }
+        {
+          about?.body.map((paragraph) => (
+            <p class="mt-8 max-w-3xl text-lg leading-8 text-nivo-text-muted sm:text-xl">
+              {paragraph.en}
+            </p>
+          ))
+        }
+      </div>
     </div>
   </section>
 
   <!-- Our Approach Section -->
   <section id="approach" class="bg-nivo-background">
-    <div class="mx-auto max-w-6xl px-6 py-20">
-      <h2 class="nivo-rule text-2xl font-semibold tracking-tight sm:text-3xl">
-        {approach?.heading.en}
-      </h2>
+    <div
+      class="nivo-container nivo-section grid gap-10 lg:grid-cols-[11rem_minmax(0,1fr)] lg:gap-16"
+    >
+      <span class="nivo-eyebrow" aria-hidden="true">02</span>
+      <div>
+        <h2 class="nivo-rule max-w-2xl text-3xl sm:text-4xl">
+          {approach?.heading.en}
+        </h2>
 
-      {
-        approach?.body.map((paragraph) => (
-          <p class="mt-6 max-w-prose text-lg text-nivo-text-muted">{paragraph.en}</p>
-        ))
-      }
+        {
+          approach?.body.map((paragraph) => (
+            <p class="mt-8 max-w-2xl text-lg leading-8 text-nivo-text-muted">{paragraph.en}</p>
+          ))
+        }
 
-      <div class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-        {siteConfig.approach.map((principle) => <ApproachCard principle={principle} />)}
+        <div class="mt-14 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+          {siteConfig.approach.map((principle) => <ApproachCard principle={principle} />)}
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Divisions Section -->
   <section id="divisions" class="border-y border-nivo-border bg-nivo-surface">
-    <div class="mx-auto max-w-6xl px-6 py-20">
-      <h2 class="nivo-rule text-2xl font-semibold tracking-tight sm:text-3xl">
-        {divisions?.heading.en}
-      </h2>
+    <div
+      class="nivo-container nivo-section grid gap-10 lg:grid-cols-[11rem_minmax(0,1fr)] lg:gap-16"
+    >
+      <span class="nivo-eyebrow" aria-hidden="true">03</span>
+      <div>
+        <h2 class="nivo-rule max-w-2xl text-3xl sm:text-4xl">
+          {divisions?.heading.en}
+        </h2>
 
-      {
-        divisions?.body.map((paragraph) => (
-          <p class="mt-6 max-w-prose text-lg text-nivo-text-muted">{paragraph.en}</p>
-        ))
-      }
+        {
+          divisions?.body.map((paragraph) => (
+            <p class="mt-8 max-w-2xl text-lg leading-8 text-nivo-text-muted">{paragraph.en}</p>
+          ))
+        }
 
-      <div class="mt-12 grid gap-8 sm:grid-cols-2">
-        {siteConfig.divisions.map((division) => <DivisionCard division={division} />)}
+        <div class="mt-14 grid gap-6 sm:grid-cols-2">
+          {siteConfig.divisions.map((division) => <DivisionCard division={division} />)}
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Contact CTA Section -->
-  <section id="contact" class="bg-nivo-background">
-    <div class="mx-auto max-w-6xl px-6 py-20">
-      <div class="max-w-2xl">
-        <h2 class="nivo-rule text-2xl font-semibold tracking-tight sm:text-3xl">
+  <section id="contact" class="nivo-on-navy bg-nivo-navy">
+    <div
+      class="nivo-container nivo-section grid gap-10 lg:grid-cols-[11rem_minmax(0,1fr)] lg:gap-16"
+    >
+      <span class="nivo-eyebrow" aria-hidden="true">04</span>
+      <div class="max-w-3xl">
+        <h2 class="nivo-rule text-3xl text-nivo-text-inverse sm:text-4xl">
           {contact?.heading.en}
         </h2>
 
-        <p class="mt-6 text-lg text-nivo-text-muted">
+        <p class="mt-8 max-w-2xl text-lg leading-8 text-nivo-text-inverse-muted">
           {contact?.body.en}
         </p>
 
         <div class="mt-10">
-          <a class="nivo-btn nivo-btn-primary" href={cta?.href}> {cta?.label.en} </a>
+          <a class="nivo-btn nivo-btn-gold" href={cta?.href}> {cta?.label.en} </a>
         </div>
       </div>
     </div>
