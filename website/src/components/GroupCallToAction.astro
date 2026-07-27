@@ -1,0 +1,44 @@
+---
+import type { CtaSection } from '../content/sections';
+
+interface Props {
+  /** Content-owned CTA section. Omit safely when its registry entry is missing. */
+  section?: CtaSection;
+
+  /** Optional decorative sequence marker for long-form page compositions. */
+  index?: string;
+}
+
+const { section, index } = Astro.props;
+---
+
+{
+  section && (
+    <section class="nivo-on-navy bg-nivo-navy">
+      <div class="nivo-container nivo-section grid gap-10 lg:grid-cols-[11rem_minmax(0,1fr)] lg:gap-16">
+        {index && (
+          <span class="nivo-eyebrow" aria-hidden="true">
+            {index}
+          </span>
+        )}
+
+        <div class:list={['max-w-3xl', !index && 'lg:col-start-2']}>
+          <h2 class="nivo-rule text-3xl text-nivo-text-inverse sm:text-4xl">
+            {section.heading.en}
+          </h2>
+
+          <p class="mt-8 max-w-2xl text-lg leading-8 text-nivo-text-inverse-muted">
+            {section.body.en}
+          </p>
+
+          <div class="mt-10">
+            <a class="nivo-btn nivo-btn-gold" href={section.link.href}>
+              {' '}
+              {section.link.label.en}{' '}
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}

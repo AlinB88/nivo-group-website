@@ -1,6 +1,7 @@
 ---
 import ApproachCard from '../components/ApproachCard.astro';
 import DivisionCard from '../components/DivisionCard.astro';
+import GroupCallToAction from '../components/GroupCallToAction.astro';
 import { siteConfig } from '../config/site';
 import { getSectionOfKind } from '../content/sections';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -11,11 +12,10 @@ const SLUG = '/';
 const hero = getSectionOfKind('home.hero', 'hero');
 const about = getSectionOfKind('home.about', 'text');
 const approach = getSectionOfKind('home.approach', 'text');
-const divisions = getSectionOfKind('home.divisions', 'text');
-const contact = getSectionOfKind('home.contact', 'cta');
+const divisions = getSectionOfKind('group.divisions', 'text');
+const contact = getSectionOfKind('group.contact', 'cta');
 
 const [exploreCta, contactCta] = hero?.links ?? [];
-const cta = contact?.link;
 ---
 
 <BaseLayout slug={SLUG}>
@@ -128,24 +128,5 @@ const cta = contact?.link;
   </section>
 
   <!-- Contact CTA Section -->
-  <section id="contact" class="nivo-on-navy bg-nivo-navy">
-    <div
-      class="nivo-container nivo-section grid gap-10 lg:grid-cols-[11rem_minmax(0,1fr)] lg:gap-16"
-    >
-      <span class="nivo-eyebrow" aria-hidden="true">04</span>
-      <div class="max-w-3xl">
-        <h2 class="nivo-rule text-3xl text-nivo-text-inverse sm:text-4xl">
-          {contact?.heading.en}
-        </h2>
-
-        <p class="mt-8 max-w-2xl text-lg leading-8 text-nivo-text-inverse-muted">
-          {contact?.body.en}
-        </p>
-
-        <div class="mt-10">
-          <a class="nivo-btn nivo-btn-gold" href={cta?.href}> {cta?.label.en} </a>
-        </div>
-      </div>
-    </div>
-  </section>
+  <GroupCallToAction section={contact} index="04" />
 </BaseLayout>

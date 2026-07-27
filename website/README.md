@@ -26,7 +26,7 @@ No UI framework. The build ships **zero JavaScript** — the mobile menu is a na
 ```text
 src/
 ├── assets/       build-processed imports (empty)
-├── components/   BrandMark, Header, Footer, PageHero, DivisionCard, ApproachCard
+├── components/   BrandMark, Header, Footer, PageHero, GroupCallToAction, DivisionCard, ApproachCard
 │   └── loading/  NivoLoader.astro — placeholder shell for the 3D experience
 ├── config/
 │   └── site.ts   composition root — assembles content, holds SEO + colors
@@ -40,7 +40,7 @@ src/
 │   ├── navigation.ts  nav + legal links
 │   └── i18n.ts        bilingual primitives
 ├── layouts/      BaseLayout.astro — HTML shell, SEO, canonical, OpenGraph
-├── pages/        index, contact, privacy, terms, robots.txt.ts
+├── pages/        index, divisions, contact, privacy, terms, 404, robots.txt.ts
 └── styles/       global.css — brand tokens, base layer, button components
 
 public/
@@ -337,24 +337,26 @@ and uses the `summary` Twitter card, so no broken preview is advertised.
 
 ## Planned page hierarchy
 
-Shipped today: `/`, `/contact`, `/privacy`, `/terms`, plus `robots.txt` and the
+Shipped today: `/`, `/divisions`, `/contact`, `/privacy`, `/terms`, plus `robots.txt` and the
 generated sitemap.
 
 Planned pages and what blocks each are recorded in `src/content/pages.ts` — that
 registry, not this table, is the source of truth:
 
-| Route       | Status    | Blocked by                                      |
-| :---------- | :-------- | :---------------------------------------------- |
-| `/`         | published | —                                               |
-| `/contact`  | published | —                                               |
-| `/privacy`  | published | —                                               |
-| `/terms`    | published | —                                               |
-| `/about`    | planned   | `company.mission`, `vision`, `values` are empty |
-| `/advisory` | planned   | division overview, capabilities, services empty |
-| `/it`       | planned   | division overview, capabilities, services empty |
-| `/finance`  | planned   | division status is `planned`; scope unconfirmed |
-| `/services` | planned   | services registry is empty                      |
-| `/insights` | planned   | no editorial decision or articles               |
+| Route        | Status    | Blocked by                                      |
+| :----------- | :-------- | :---------------------------------------------- |
+| `/`          | published | —                                               |
+| `/divisions` | published | —                                               |
+| `/contact`   | published | —                                               |
+| `/privacy`   | published | —                                               |
+| `/terms`     | published | —                                               |
+| `/404`       | published | no-index static fallback                        |
+| `/about`     | planned   | `company.mission`, `vision`, `values` are empty |
+| `/advisory`  | planned   | division overview, capabilities, services empty |
+| `/it`        | planned   | division overview, capabilities, services empty |
+| `/finance`   | planned   | division status is `planned`; scope unconfirmed |
+| `/services`  | planned   | services registry is empty                      |
+| `/insights`  | planned   | no editorial decision or articles               |
 
 Division route segments are already fixed by `Division.slug` (`advisory`, `it`,
 `finance`), so those pages can be generated from the content model without renaming

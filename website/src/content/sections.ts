@@ -164,7 +164,8 @@ export const sections: readonly Section[] = [
     body: [en(`The principles that shape how ${company.name} works, across every division.`)],
   },
   {
-    id: 'home.divisions',
+    // Shared by the homepage preview and the canonical /divisions index.
+    id: 'group.divisions',
     kind: 'text',
     heading: en('Our Divisions'),
     body: [
@@ -174,13 +175,24 @@ export const sections: readonly Section[] = [
     ],
   },
   {
-    id: 'home.contact',
+    // Shared group-level CTA. It does not make a claim about a service.
+    id: 'group.contact',
     kind: 'cta',
     heading: en(`Work with ${company.name}`),
     body: en(
       'Tell us what your organization is working toward, and we will connect you with the division best suited to support your goals.'
     ),
     link: { label: en('Contact Us'), href: contactHref, primary: true },
+  },
+
+  // ---------------------------------------------------------- not found
+  {
+    id: 'not-found.hero',
+    kind: 'hero',
+    headline: en('Page not found'),
+    subheadline: en(''),
+    intro: en('The page you requested is unavailable or may have moved.'),
+    links: [{ label: en('Return home'), href: '/', primary: true }],
   },
 
   // ------------------------------------------------------------- contact

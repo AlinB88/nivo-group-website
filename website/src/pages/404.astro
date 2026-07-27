@@ -1,0 +1,13 @@
+---
+import PageHero from '../components/PageHero.astro';
+import { getSectionOfKind } from '../content/sections';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const SLUG = '/404';
+
+const hero = getSectionOfKind('not-found.hero', 'hero');
+---
+
+<BaseLayout slug={SLUG}>
+  <PageHero title={hero?.headline.en ?? ''} intro={hero?.intro.en} links={hero?.links} />
+</BaseLayout>

@@ -24,7 +24,7 @@ export const nav: readonly NavItem[] = [
   },
   {
     label: 'Divisions',
-    href: '/#divisions',
+    href: '/divisions',
   },
   {
     label: 'Contact',

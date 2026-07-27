@@ -16,7 +16,7 @@
 
 import { company } from './company';
 import { getSections, type Section } from './sections';
-import { defaultSeo, type SeoMeta } from './seo';
+import { defaultSeo, noindexSeo, type SeoMeta } from './seo';
 
 export type PageStatus = 'published' | 'planned';
 
@@ -56,7 +56,7 @@ export const pages: readonly PageDefinition[] = [
     // root title comes from siteConfig.seo.defaultTitle.
     description: '',
     seo: defaultSeo(),
-    sectionIds: ['home.hero', 'home.about', 'home.approach', 'home.divisions', 'home.contact'],
+    sectionIds: ['home.hero', 'home.about', 'home.approach', 'group.divisions', 'group.contact'],
     status: 'published',
     blockedBy: '',
   },
@@ -67,6 +67,16 @@ export const pages: readonly PageDefinition[] = [
     description: `Contact ${company.name} about its advisory and technology divisions, or reach a division directly.`,
     seo: defaultSeo(),
     sectionIds: ['contact.hero', 'contact.details', 'contact.divisions'],
+    status: 'published',
+    blockedBy: '',
+  },
+  {
+    slug: '/divisions',
+    title: 'Divisions',
+    titleAr: '',
+    description: `Explore the specialized divisions of ${company.name}.`,
+    seo: defaultSeo(),
+    sectionIds: ['group.divisions', 'group.contact'],
     status: 'published',
     blockedBy: '',
   },
@@ -87,6 +97,18 @@ export const pages: readonly PageDefinition[] = [
     description: `Terms covering use of the ${company.name} website.`,
     seo: defaultSeo(),
     sectionIds: ['terms.body'],
+    status: 'published',
+    blockedBy: '',
+  },
+  {
+    // Astro emits this as the static fallback page. Keep it noindex so it is
+    // available to visitors but never competes with a real destination.
+    slug: '/404',
+    title: 'Page not found',
+    titleAr: '',
+    description: `The requested ${company.name} page could not be found.`,
+    seo: noindexSeo(),
+    sectionIds: ['not-found.hero'],
     status: 'published',
     blockedBy: '',
   },
