@@ -125,7 +125,7 @@ export const pages: readonly PageDefinition[] = [
   },
   {
     slug: '/advisory',
-    title: 'NIVO Advisory',
+    title: 'NIVO Advisory Services',
     titleAr: '',
     description: '',
     seo: defaultSeo(),
@@ -135,7 +135,7 @@ export const pages: readonly PageDefinition[] = [
   },
   {
     slug: '/it',
-    title: 'NIVO IT',
+    title: 'NIVO IT Services',
     titleAr: '',
     description: '',
     seo: defaultSeo(),

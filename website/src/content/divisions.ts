@@ -109,7 +109,7 @@ export const divisions: readonly Division[] = [
     id: 'advisory',
     slug: 'advisory',
 
-    name: 'NIVO Advisory',
+    name: 'NIVO Advisory Services',
     legalName: 'NIVO Advisory Solutions',
 
     nameAr: 'نيفو للخدمات الاستشارية',
@@ -135,7 +135,7 @@ export const divisions: readonly Division[] = [
     id: 'it',
     slug: 'it',
 
-    name: 'NIVO IT',
+    name: 'NIVO IT Services',
     // No distinct registered name supplied — none invented.
     legalName: null,
 

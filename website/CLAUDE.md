@@ -1,366 +1,110 @@
-\# AlMithaq Website — Engineering Instructions
+# NIVO Group Website — Project Instructions
 
+## Project identity and scope
 
+This repository is the corporate website for **NIVO Group** at
+`nivogroup.ly`. NIVO Group is a parent holding group, not a single operating
+company and not a division website.
 
-\## Project Stack
+Published divisions:
 
+- **NIVO Advisory Services**
+- **NIVO IT Services**
 
+NIVO Finance is modeled as planned and must not be published until its scope,
+content, and publication status are approved.
 
-Framework:
+Detailed service delivery belongs to the division websites. The group site
+introduces the group, its divisions, and routes visitors to the right
+destination. Do not reintroduce any former project identity anywhere in this
+project.
 
-Astro
+## Technology
 
+- Astro 7, static output
+- TypeScript
+- Tailwind CSS v4
+- npm
 
+The site ships no client JavaScript. Prefer Astro components and native browser
+features. Do not add React, hydration, or a new dependency unless the product
+need cannot be met with the current stack; explain the reason first.
 
-UI:
+## Content architecture
 
-React
+Content ownership is deliberate:
 
+- `src/content/company.ts`: group identity, approach, contact, mission, vision, values
+- `src/content/divisions.ts`: division identity, publication status, and links
+- `src/content/services.ts`: group-level service summaries only
+- `src/content/pages.ts`: page metadata, status, SEO, and section composition
+- `src/content/sections.ts`: every public page heading, paragraph, and CTA
+- `src/content/navigation.ts`: navigation and legal links
+- `src/content/seo.ts`: page-level SEO overrides
+- `src/content/i18n.ts`: localization primitives
+- `src/config/site.ts`: composition root, canonical URL, global SEO, and brand colors
 
+Astro pages compose; components render; content modules own business copy. Do
+not place business information in pages or components, duplicate page metadata,
+or bypass safe content lookups.
 
-Language:
+Never invent business facts, services, capabilities, statistics, certifications,
+partnerships, contact details, legal wording, or Arabic translations. Use the
+existing null, empty, planned, and unpublished states until approved material is
+provided.
 
-TypeScript
+## Naming and language
 
+Use `company.name` rather than hardcoding the group name. Use the division
+registry for public division names. Keep stable IDs and slugs unchanged unless a
+routing change is explicitly required.
 
+Arabic is rendered only where approved Arabic content already exists. Do not
+create an Arabic page, switcher, or body translation without supplied,
+reviewed translations.
 
-Styling:
+## Design and accessibility
 
-Tailwind CSS
+NIVO should feel like a premium international holding group: minimal, elegant,
+and corporate. Use the established navy-and-gold system with restrained motion,
+clear hierarchy, generous space, and no generic SaaS patterns.
 
+Do not modify approved NIVO artwork, create alternate identities, or change
+brand colors without approval. Brand assets belong under `public/brand/`;
+incidental page imagery belongs under `public/images/`.
 
+Preserve semantic headings, native interactive controls, keyboard access,
+visible focus states, responsive behavior, and `prefers-reduced-motion`.
+Prioritize static performance and avoid unnecessary runtime work.
 
-Package Manager:
+## Public routes and publication
 
-npm
+Published routes are `/`, `/divisions`, `/contact`, `/privacy`,
+`/terms`, and the no-index `/404` fallback. Planned routes stay unbuilt
+until their required content is approved.
 
+Do not remove existing functionality or publish empty pages. Keep canonical
+URLs, sitemap behavior, and robots behavior intact.
 
+## Workflow and quality
 
+Before an architectural change, explain why it is needed and its tradeoffs.
+Prefer extending existing components over adding new ones; add a component only
+when it removes meaningful duplication or establishes a reusable pattern.
 
+Keep commits focused and logically separated. Keep `README.md` and the
+documents under `../docs/` synchronized with architecture and launch
+decisions.
 
-\---
+Before completing a phase, run:
 
-
-
-\# Architecture Rules
-
-
-
-Astro is the default framework.
-
-
-
-Prefer Astro components for:
-
-
-
-\- Static sections
-
-\- Marketing pages
-
-\- SEO content
-
-\- Layouts
-
-
-
-
-
-Use React only when needed for:
-
-
-
-\- Interactive elements
-
-\- Stateful components
-
-\- Complex user interfaces
-
-
-
-
-
-Do not use React for simple static content.
-
-
-
-
-
-\---
-
-
-
-\# Project Structure
-
-
-
-Maintain a clean structure:
-
-
-
-src/
-
-├── components/
-
-├── layouts/
-
-├── pages/
-
-├── styles/
-
-└── assets/
-
-
-
-
-
-Create files only when they provide clear value.
-
-
-
-
-
-\---
-
-
-
-\# Code Quality
-
-
-
-Before completing any feature, verify:
-
-
-
+```sh
+npm run format
+npm run check
 npm run lint
-
-
-
-npm run format:check
-
-
-
 npm run build
-
-
-
-
-
-All checks must pass.
-
-
-
-
-
-\---
-
-
-
-\# Styling Rules
-
-
-
-Use Tailwind CSS.
-
-
-
-Prefer:
-
-
-
-\- Reusable utility patterns
-
-\- Consistent spacing
-
-\- Design tokens
-
-\- Responsive layouts
-
-
-
-
-
-Avoid:
-
-
-
-\- Inline styles
-
-\- Duplicate CSS
-
-\- Random values without purpose
-
-
-
-
-
-\---
-
-
-
-\# React Rules
-
-
-
-React components must:
-
-
-
-\- Use TypeScript
-
-\- Be reusable
-
-\- Avoid unnecessary state
-
-\- Avoid unnecessary client-side JavaScript
-
-
-
-
-
-Use hydration directives only when required.
-
-
-
-
-
-\---
-
-
-
-\# Dependency Rules
-
-
-
-Before installing a new package:
-
-
-
-Explain:
-
-
-
-1\. Why it is required
-
-2\. What problem it solves
-
-3\. Why existing tools cannot solve it
-
-
-
-
-
-Avoid unnecessary dependencies.
-
-
-
-Performance is more important than adding features quickly.
-
-
-
-
-
-\---
-
-
-
-\# Performance Rules
-
-
-
-Prioritize:
-
-
-
-\- Fast loading
-
-\- SEO
-
-\- Accessibility
-
-\- Mobile performance
-
-
-
-
-
-Avoid:
-
-
-
-\- Heavy libraries without justification
-
-\- Excessive JavaScript
-
-\- Large unoptimized assets
-
-
-
-
-
-\---
-
-
-
-\# Brand Protection
-
-
-
-Follow the parent AlMithaq CLAUDE.md instructions.
-
-
-
-Important:
-
-
-
-NIVO assets are protected.
-
-
-
-Do not:
-
-
-
-\- Modify NIVO artwork
-
-\- Redesign logos
-
-\- Change brand colors
-
-\- Create alternative identities
-
-
-
-without approval.
-
-
-
-
-
-\---
-
-
-
-\# Development Workflow
-
-
-
-For major changes:
-
-
-
-1\. Explain the plan.
-
-2\. Wait for approval.
-
-3\. Implement step-by-step.
-
-4\. Verify the result.
-
-
-
-
-
-Prefer simple, maintainable solutions.
-
+```
+
+Resolve errors before completion. Treat the site as production code and retain
+the existing content-first architecture unless a demonstrated improvement
+outweighs the migration cost.

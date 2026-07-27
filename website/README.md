@@ -5,11 +5,11 @@ The corporate website for NIVO Group ([nivogroup.ly](https://nivogroup.ly)).
 This repository contains **only** the parent group site. Each division has its own
 separate project:
 
-| Site          | Domain                                     |
-| :------------ | :----------------------------------------- |
-| NIVO Group    | `nivogroup.ly` — this repository           |
-| NIVO Advisory | `advisory.nivogroup.ly` — separate project |
-| NIVO IT       | `it.nivogroup.ly` — separate project       |
+| Site                   | Domain                                     |
+| :--------------------- | :----------------------------------------- |
+| NIVO Group             | `nivogroup.ly` — this repository           |
+| NIVO Advisory Services | `advisory.nivogroup.ly` — separate project |
+| NIVO IT Services       | `it.nivogroup.ly` — separate project       |
 
 Do not add division-specific pages or service content here. This site introduces the
 group and links out to each division.
@@ -241,18 +241,18 @@ others.
 
 Current values:
 
-| id         | name          | legalName               | nameAr                  |
-| :--------- | :------------ | :---------------------- | :---------------------- |
-| `advisory` | NIVO Advisory | NIVO Advisory Solutions | نيفو للخدمات الاستشارية |
-| `it`       | NIVO IT       | _not confirmed_         | نيفو لتقنية المعلومات   |
-| `finance`  | NIVO Finance  | _not confirmed_         | نيفو للخدمات المالية    |
+| id         | name                   | legalName               | nameAr                  |
+| :--------- | :--------------------- | :---------------------- | :---------------------- |
+| `advisory` | NIVO Advisory Services | NIVO Advisory Solutions | نيفو للخدمات الاستشارية |
+| `it`       | NIVO IT Services       | _not confirmed_         | نيفو لتقنية المعلومات   |
+| `finance`  | NIVO Finance           | _not confirmed_         | نيفو للخدمات المالية    |
 
 `legalName` is `null` where no registered name has been supplied — none is invented.
 Use `legalNameOf(division)`, which falls back to `name`. `legalNameArOf()` does the
 same for Arabic.
 
 **Open question — English/Arabic asymmetry.** English `name` is now the short brand
-form (_NIVO Advisory_), but `nameAr` is the fuller form (_نيفو للخدمات الاستشارية_,
+form (_NIVO Advisory Services_), but `nameAr` is the fuller form (_نيفو للخدمات الاستشارية_,
 "NIVO for Advisory Services"), which corresponds to the legal name rather than the
 brand. Arabic short-brand forms have not been supplied and were not invented. Decide
 whether Arabic should follow the brand/legal split, and if so populate `nameAr` with
@@ -264,11 +264,11 @@ Divisions carry a `status`. **Only `active` divisions render** — `siteConfig.d
 is pre-filtered. A division can be modeled long before it is announced; publishing it
 means flipping its status, nothing else.
 
-| Division      | Status    | Rendered |
-| :------------ | :-------- | :------- |
-| NIVO Advisory | `active`  | yes      |
-| NIVO IT       | `active`  | yes      |
-| NIVO Finance  | `planned` | no       |
+| Division               | Status    | Rendered |
+| :--------------------- | :-------- | :------- |
+| NIVO Advisory Services | `active`  | yes      |
+| NIVO IT Services       | `active`  | yes      |
+| NIVO Finance           | `planned` | no       |
 
 Use `allDivisions` to reach every division regardless of status.
 
