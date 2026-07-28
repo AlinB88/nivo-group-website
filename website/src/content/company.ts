@@ -6,16 +6,16 @@
  * placeholders — no mission or value statement has been supplied, and none is
  * invented here. Nothing renders them, so the site's appearance is unaffected.
  *
- * Supports a future /about page. That page is not created: it would be empty
- * until mission, vision, and values are written.
+ * The published /about page uses the approved group narrative and approach.
+ * Mission, vision, and values remain unpublished until they are supplied.
  */
 
 import { pendingContent, type Localized } from './i18n';
 
 /**
  * Published contact details. Every field is null until real information is
- * supplied; pages render a "To be provided" placeholder rather than inventing
- * an address, number, or office.
+ * supplied; pages omit unavailable fields rather than inventing an address,
+ * number, or office.
  */
 export interface ContactDetails {
   email: string | null;

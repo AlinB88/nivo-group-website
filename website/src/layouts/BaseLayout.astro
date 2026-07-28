@@ -74,6 +74,17 @@ const shareImageURL = shareImage ? new URL(shareImage, siteConfig.url).href : nu
 // A large-image card without an image renders as a broken preview.
 const twitterCard = shareImageURL ? 'summary_large_image' : 'summary';
 
+// This schema is intentionally limited to identity facts already owned by
+// siteConfig. Contact, address, logo, and social profile fields stay absent
+// until approved records exist.
+const websiteSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: siteConfig.name,
+  url: siteConfig.url,
+  description: siteConfig.seo.metaDescription,
+});
+
 /*
  * `index,follow` is what crawlers assume with no tag at all, so emitting it
  * would add noise to every page for zero effect. Only a restrictive directive
@@ -92,6 +103,9 @@ const keywords = seo?.keywords ?? [];
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="application-name" content={siteConfig.name} />
+    <meta name="theme-color" content={siteConfig.colors.navy} />
+    <meta name="color-scheme" content="light" />
 
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
@@ -112,6 +126,8 @@ const keywords = seo?.keywords ?? [];
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDescription} />
     {shareImageURL && <meta name="twitter:image" content={shareImageURL} />}
+
+    <script is:inline type="application/ld+json" set:html={websiteSchema} />
 
     {
       /* Fixed paths: dropping approved artwork at these filenames in public/

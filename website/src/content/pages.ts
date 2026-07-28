@@ -56,7 +56,7 @@ export const pages: readonly PageDefinition[] = [
     // root title comes from siteConfig.seo.defaultTitle.
     description: '',
     seo: defaultSeo(),
-    sectionIds: ['home.hero', 'home.about', 'home.approach', 'group.divisions', 'group.contact'],
+    sectionIds: ['home.hero', 'group.about', 'group.approach', 'group.divisions', 'group.contact'],
     status: 'published',
     blockedBy: '',
   },
@@ -119,9 +119,9 @@ export const pages: readonly PageDefinition[] = [
     titleAr: '',
     description: '',
     seo: defaultSeo(),
-    sectionIds: [],
-    status: 'planned',
-    blockedBy: 'company.mission, company.vision and company.values are empty',
+    sectionIds: ['group.about', 'group.approach', 'group.contact'],
+    status: 'published',
+    blockedBy: '',
   },
   {
     slug: '/advisory',

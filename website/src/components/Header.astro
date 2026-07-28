@@ -6,14 +6,15 @@ import { siteConfig } from '../config/site';
 // contact destination never silently duplicates it in the nav list.
 const navItems = siteConfig.nav.filter((item) => !item.cta);
 const cta = siteConfig.nav.find((item) => item.cta);
+const currentPath = Astro.url.pathname;
+
+const isCurrentPage = (href: string): boolean => href === currentPath;
 ---
 
-<header
-  class="sticky top-0 z-30 border-b border-nivo-border bg-nivo-background/95 backdrop-blur-md"
->
-  <div class="nivo-container flex items-center justify-between gap-8 py-4 sm:py-5">
+<header class="nivo-site-header sticky top-0 z-30">
+  <div class="nivo-container flex items-center justify-between gap-8 py-3 sm:py-4">
     <a href="/" aria-label={`Return to ${siteConfig.name} home`}>
-      <BrandMark />
+      <BrandMark inverse />
     </a>
 
     {/* Desktop navigation */}
@@ -23,8 +24,12 @@ const cta = siteConfig.nav.find((item) => item.cta);
           navItems.map((item) => (
             <li>
               <a
-                class="font-semibold tracking-wide text-nivo-text-muted hover:text-nivo-navy"
+                class:list={[
+                  'font-semibold tracking-wide hover:text-nivo-navy',
+                  isCurrentPage(item.href) ? 'text-nivo-gold' : 'text-nivo-text-inverse-muted',
+                ]}
                 href={item.href}
+                aria-current={isCurrentPage(item.href) ? 'page' : undefined}
               >
                 {item.label}
               </a>
@@ -54,7 +59,7 @@ const cta = siteConfig.nav.find((item) => item.cta);
     }
     <details class="sm:hidden">
       <summary
-        class="cursor-pointer list-none py-2 text-sm font-bold tracking-[0.1em] text-nivo-navy uppercase [&::-webkit-details-marker]:hidden"
+        class="cursor-pointer list-none py-2 text-sm font-bold tracking-[0.1em] text-nivo-text-inverse uppercase [&::-webkit-details-marker]:hidden"
       >
         Menu
       </summary>
@@ -67,7 +72,14 @@ const cta = siteConfig.nav.find((item) => item.cta);
           {
             navItems.map((item) => (
               <li>
-                <a class="block py-3 font-semibold text-nivo-text-muted" href={item.href}>
+                <a
+                  class:list={[
+                    'block py-3 font-semibold',
+                    isCurrentPage(item.href) ? 'text-nivo-gold' : 'text-nivo-text-inverse-muted',
+                  ]}
+                  href={item.href}
+                  aria-current={isCurrentPage(item.href) ? 'page' : undefined}
+                >
                   {item.label}
                 </a>
               </li>

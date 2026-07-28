@@ -26,7 +26,7 @@ No UI framework. The build ships **zero JavaScript** — the mobile menu is a na
 ```text
 src/
 ├── assets/       build-processed imports (empty)
-├── components/   BrandMark, Header, Footer, PageHero, GroupCallToAction, DivisionCard, ApproachCard
+├── components/   BrandMark, Header, Footer, PageHero, GroupCallToAction, GroupApproachSection, DivisionCard, ApproachCard
 │   └── loading/  NivoLoader.astro — placeholder shell for the 3D experience
 ├── config/
 │   └── site.ts   composition root — assembles content, holds SEO + colors
@@ -40,7 +40,7 @@ src/
 │   ├── navigation.ts  nav + legal links
 │   └── i18n.ts        bilingual primitives
 ├── layouts/      BaseLayout.astro — HTML shell, SEO, canonical, OpenGraph
-├── pages/        index, divisions, contact, privacy, terms, 404, robots.txt.ts
+├── pages/        index, about, divisions, contact, privacy, terms, 404, robots.txt.ts
 └── styles/       global.css — brand tokens, base layer, button components
 
 public/
@@ -179,8 +179,8 @@ A content gap renders less; it never fails the build.
 ##### What stays in markup
 
 **UI microcopy** — button labels (`Visit Website`, `Coming Soon`), field labels
-(`Email`, `Phone`, `Location`), empty states (`To be provided`), and column headings
-(`Explore`, `Follow`). These are interface strings, not business content, and belong
+(`Email`, `Phone`, `Location`), and column headings (`Explore`, `Legal`).
+These are interface strings, not business content, and belong
 with the component that renders them. They are also the natural first candidates for
 extraction if a UI-string catalogue is ever needed for localization.
 
@@ -316,20 +316,29 @@ component, so it belongs in its own phase.
 
 All of `check`, `lint`, `format:check`, and `build` must pass before a change is complete.
 
-## Required brand assets
+## Continuous integration
+
+GitHub Actions runs `npm ci`, `npm run format:check`, `npm run check`,
+`npm run lint`, and `npm run build` for website changes on pull requests
+and pushes to `main`. The workflow uses Node.js 22.12.0, the minimum version
+supported by this project.
+
+## Brand assets
 
 The following assets are **not yet available** and are placeholders or absent. No
 substitute artwork has been generated — each needs the approved NIVO mark.
 
-| Asset                                 | Status                                                                             |
-| :------------------------------------ | :--------------------------------------------------------------------------------- |
-| `public/favicon.svg`                  | **Placeholder.** Navy field, gold keyline. Not a logo. Replace with the NIVO mark. |
-| `public/favicon.ico`                  | **Placeholder.** 32×32, same device. Replace with the NIVO mark.                   |
-| `public/apple-touch-icon.png`         | **Placeholder.** 180×180, same device. Replace with the NIVO mark.                 |
-| `public/brand/social/og-image.png`    | **Missing.** 1200×630 social share image.                                          |
-| Header/footer logo                    | Text wordmark with a gold keyline stands in for the NIVO mark.                     |
-| `public/brand/mascot/nivo-mascot.glb` | **Missing.** The NIVO 3D mascot — see below.                                       |
-| `public/brand/logo/`                  | **Empty.** Awaits the approved wordmark and mark files.                            |
+| Asset                                  | Status                                                                             |
+| :------------------------------------- | :--------------------------------------------------------------------------------- |
+| `public/favicon.svg`                   | **Placeholder.** Navy field, gold keyline. Not a logo. Replace with the NIVO mark. |
+| `public/favicon.ico`                   | **Placeholder.** 32×32, same device. Replace with the NIVO mark.                   |
+| `public/apple-touch-icon.png`          | **Placeholder.** 180×180, same device. Replace with the NIVO mark.                 |
+| `public/brand/social/og-image.png`     | **Missing.** 1200×630 social share image.                                          |
+| Header/footer logo                     | **Published.** `public/brand/logo/nivo-logo.png`, rendered through `BrandMark`.    |
+| `public/brand/mascot/nivo-3d-mark.png` | **Published.** Decorative dimensional mark for page presentation.                  |
+| `public/brand/mascot/nivo-stamp.png`   | **Published.** Desktop home-hero artwork.                                          |
+| `public/brand/mascot/nivo-mascot.glb`  | **Missing.** The NIVO 3D mascot — see below.                                       |
+| `public/brand/logo/`                   | Contains the published NIVO logo asset.                                            |
 
 Once the share image exists, set `seo.ogImage` in `src/config/site.ts` to
 `/brand/social/og-image.png`. While it is `null`, `BaseLayout` omits the `og:image` tag
@@ -337,7 +346,7 @@ and uses the `summary` Twitter card, so no broken preview is advertised.
 
 ## Planned page hierarchy
 
-Shipped today: `/`, `/divisions`, `/contact`, `/privacy`, `/terms`, plus `robots.txt` and the
+Shipped today: `/`, `/about`, `/divisions`, `/contact`, `/privacy`, `/terms`, plus `robots.txt` and the
 generated sitemap.
 
 Planned pages and what blocks each are recorded in `src/content/pages.ts` — that
@@ -351,7 +360,7 @@ registry, not this table, is the source of truth:
 | `/privacy`   | published | —                                               |
 | `/terms`     | published | —                                               |
 | `/404`       | published | no-index static fallback                        |
-| `/about`     | planned   | `company.mission`, `vision`, `values` are empty |
+| `/about`     | published | approved group narrative and approach           |
 | `/advisory`  | planned   | division overview, capabilities, services empty |
 | `/it`        | planned   | division overview, capabilities, services empty |
 | `/finance`   | planned   | division status is `planned`; scope unconfirmed |

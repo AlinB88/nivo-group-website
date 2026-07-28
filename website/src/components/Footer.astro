@@ -22,28 +22,6 @@ const columns = [
         </p>
 
         <p class="mt-5 max-w-sm text-sm leading-7">{siteConfig.philosophy}</p>
-
-        <p class="mt-8 text-xs font-semibold tracking-[0.15em] text-nivo-text-inverse uppercase">
-          Follow
-        </p>
-
-        {
-          /* Reserved for social profiles — no accounts published yet, so these
-            are inert placeholders rather than invented links. */
-        }
-        <ul class="mt-4 flex gap-3">
-          {
-            ['one', 'two', 'three'].map((slot) => (
-              <li>
-                <span
-                  class="block size-9 border border-nivo-text-inverse-muted/30 transition-colors hover:border-nivo-gold"
-                  data-social-placeholder={slot}
-                  aria-hidden="true"
-                />
-              </li>
-            ))
-          }
-        </ul>
       </div>
 
       {

@@ -1,51 +1,47 @@
 @import 'tailwindcss';
 
 /**
- * NIVO Group design tokens.
+ * NIVO Group visual system.
  *
- * Declared in Tailwind's `@theme` so each token is emitted as a CSS custom
- * property on :root AND generates matching utilities (bg-nivo-navy,
- * text-nivo-text-muted, border-nivo-border, ...). Components use the
- * utilities; raw var() is reserved for the base layer below.
- *
- * Brand values mirror `colors` in src/config/site.ts. CSS cannot import from
- * TypeScript at build time, so navy and gold are the one deliberate
- * duplication in the codebase — keep both in sync when brand colors change.
+ * Navy is the structural field. Mineral light surfaces give editorial content
+ * room to breathe; gold is limited to direction, focus, and brand detail.
+ * The two source tokens duplicated in site.ts remain deliberately aligned.
  */
 @theme {
-  /* Brand */
   --color-nivo-navy: #0b1f3a;
   --color-nivo-gold: #c8a951;
 
-  /* Surfaces */
-  --color-nivo-background: #ffffff;
-  --color-nivo-surface: #f7f8fa;
-  --color-nivo-surface-warm: #fbfaf7;
-  --color-nivo-navy-deep: #07182f;
+  --color-nivo-background: #07182f;
+  --color-nivo-surface: #f1ede3;
+  --color-nivo-surface-warm: #e5e0d5;
+  --color-nivo-navy-deep: #04101f;
 
-  /* Text — gold is never used for text on light surfaces (2.3:1). */
-  --color-nivo-text: #0b1f3a;
-  --color-nivo-text-muted: #4a5568;
-  --color-nivo-text-inverse: #ffffff;
-  --color-nivo-text-inverse-muted: #b6c0cf;
+  --color-nivo-text: #10233d;
+  --color-nivo-text-muted: #526077;
+  --color-nivo-text-inverse: #f8f6f0;
+  --color-nivo-text-inverse-muted: #c7cfda;
 
-  /* Lines */
-  --color-nivo-border: #e3e6eb;
-  --color-nivo-border-strong: #c9cfd8;
+  --color-nivo-border: #c8c6bc;
+  --color-nivo-border-strong: #9ea5af;
 
-  /*
-   * System stack only — no webfont requests. Arabic faces are listed after the
-   * Latin ones so Arabic text resolves to a real Arabic system font today, and
-   * a licensed webfont can be prepended later without touching components.
-   */
   --font-sans:
     ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
     'Noto Sans Arabic', 'Segoe UI Arabic', 'Geeza Pro', Tahoma, sans-serif;
 }
 
 @layer base {
+  :root {
+    background: var(--color-nivo-background);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
   body {
-    background-color: var(--color-nivo-background);
+    min-width: 20rem;
+    background: var(--color-nivo-background);
     color: var(--color-nivo-text);
     font-family: var(--font-sans);
     line-height: 1.7;
@@ -62,15 +58,11 @@
   h6 {
     color: var(--color-nivo-navy);
     font-weight: 600;
-    line-height: 1.08;
-    letter-spacing: -0.035em;
+    line-height: 1.04;
+    letter-spacing: -0.045em;
     text-wrap: balance;
   }
 
-  /*
-   * Arabic script joins its letters, so negative tracking damages legibility.
-   * Reset it and give the taller script more leading.
-   */
   [lang='ar'] {
     letter-spacing: normal;
     line-height: 1.9;
@@ -89,43 +81,41 @@
     cursor: not-allowed;
   }
 
-  html {
-    scroll-behavior: smooth;
-  }
-
-  /* Navy meets 3:1 against both white and the light surface token. */
   :focus-visible {
-    outline: 2px solid var(--color-nivo-navy);
-    outline-offset: 2px;
-  }
-
-  /* Gold clears 3:1 against navy, where a navy ring would be invisible. */
-  .nivo-on-navy :focus-visible {
-    outline-color: var(--color-nivo-gold);
+    outline: 2px solid var(--color-nivo-gold);
+    outline-offset: 3px;
   }
 
   ::selection {
-    background-color: var(--color-nivo-gold);
-    color: var(--color-nivo-navy);
+    background: var(--color-nivo-gold);
+    color: var(--color-nivo-navy-deep);
   }
 }
 
 @layer components {
-  /*
-   * Shared button shell. Hover states are plain state changes with no
-   * transition declared — the properties that would animate are isolated here,
-   * so adding motion later is a one-rule change.
-   */
+  .nivo-container {
+    width: min(100% - 3rem, 78rem);
+    margin-inline: auto;
+  }
+
+  .nivo-section {
+    padding-block: clamp(5.5rem, 10vw, 10rem);
+  }
+
+  .nivo-on-navy {
+    color: var(--color-nivo-text-inverse);
+  }
+
   .nivo-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    min-height: 3.125rem;
     border: 1px solid transparent;
-    min-height: 3rem;
-    padding: 0.75rem 1.35rem;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.6875rem;
+    font-weight: 750;
+    letter-spacing: 0.16em;
     text-align: center;
     text-transform: uppercase;
     transition:
@@ -136,86 +126,69 @@
   }
 
   .nivo-btn-primary {
-    background-color: var(--color-nivo-navy);
-    border-color: var(--color-nivo-navy);
-    color: var(--color-nivo-text-inverse);
+    border-color: var(--color-nivo-gold);
+    background: var(--color-nivo-gold);
+    color: var(--color-nivo-navy-deep);
   }
 
-  .nivo-btn-primary:hover {
-    background-color: var(--color-nivo-navy-deep);
-    border-color: var(--color-nivo-navy-deep);
-    transform: translateY(-1px);
+  .nivo-btn-primary:hover,
+  .nivo-btn-gold:hover {
+    border-color: #e2c97f;
+    background: #e2c97f;
+    transform: translateY(-2px);
   }
 
   .nivo-btn-secondary {
-    background-color: transparent;
-    border-color: var(--color-nivo-border-strong);
+    border-color: var(--color-nivo-navy);
     color: var(--color-nivo-navy);
   }
 
   .nivo-btn-secondary:hover {
-    border-color: var(--color-nivo-navy);
-    background-color: var(--color-nivo-navy);
+    background: var(--color-nivo-navy);
     color: var(--color-nivo-text-inverse);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
   }
 
   .nivo-btn-gold {
-    background-color: var(--color-nivo-gold);
     border-color: var(--color-nivo-gold);
-    color: var(--color-nivo-navy);
-  }
-
-  .nivo-btn-gold:hover {
-    background-color: var(--color-nivo-text-inverse);
-    border-color: var(--color-nivo-text-inverse);
-    transform: translateY(-1px);
+    background: var(--color-nivo-gold);
+    color: var(--color-nivo-navy-deep);
   }
 
   .nivo-btn-on-dark {
-    border-color: rgb(255 255 255 / 0.42);
+    border-color: rgb(248 246 240 / 0.42);
     color: var(--color-nivo-text-inverse);
   }
 
   .nivo-btn-on-dark:hover {
     border-color: var(--color-nivo-gold);
     color: var(--color-nivo-gold);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
   }
 
   .nivo-btn-disabled {
-    background-color: var(--color-nivo-surface);
-    border-color: var(--color-nivo-border);
-    color: var(--color-nivo-text-muted);
+    border-color: #bdb7aa;
+    background: #ded8cb;
+    color: #687385;
   }
 
-  /* Short gold rule used to mark section and division headings. */
   .nivo-rule::before {
-    content: '';
     display: block;
-    width: 2.5rem;
+    width: 2.75rem;
     height: 2px;
-    margin-bottom: 1.25rem;
-    background-color: var(--color-nivo-gold);
-  }
-
-  .nivo-container {
-    width: min(100% - 3rem, 76rem);
-    margin-inline: auto;
-  }
-
-  .nivo-section {
-    padding-block: clamp(5rem, 9vw, 8.5rem);
+    margin-bottom: 1.5rem;
+    background: var(--color-nivo-gold);
+    content: '';
   }
 
   .nivo-eyebrow {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    color: var(--color-nivo-text-muted);
-    font-size: 0.6875rem;
-    font-weight: 700;
-    letter-spacing: 0.16em;
+    color: var(--color-nivo-gold);
+    font-size: 0.625rem;
+    font-weight: 750;
+    letter-spacing: 0.2em;
     line-height: 1.2;
     text-transform: uppercase;
   }
@@ -227,80 +200,252 @@
     content: '';
   }
 
-  .nivo-on-navy .nivo-eyebrow {
-    color: var(--color-nivo-gold);
-  }
-
   .nivo-display {
-    font-size: clamp(3.5rem, 8vw, 7.75rem);
-    font-weight: 600;
-    letter-spacing: -0.065em;
-    line-height: 0.94;
+    font-size: clamp(3.8rem, 8.4vw, 8.75rem);
+    font-weight: 570;
+    letter-spacing: -0.075em;
+    line-height: 0.9;
   }
 
+  .nivo-site-header {
+    border-bottom: 1px solid rgb(200 169 81 / 0.3);
+    background: rgb(4 16 31 / 0.92);
+    box-shadow: 0 0.75rem 2rem rgb(1 7 14 / 0.17);
+    backdrop-filter: blur(18px);
+  }
+
+  .nivo-site-header details > summary {
+    color: var(--color-nivo-text-inverse);
+  }
+
+  .nivo-site-header details nav {
+    border-color: rgb(200 169 81 / 0.25);
+    background: var(--color-nivo-navy-deep);
+    box-shadow: 0 1.25rem 2rem rgb(1 7 14 / 0.35);
+  }
+
+  .nivo-brandmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    color: var(--color-nivo-navy);
+  }
+
+  .nivo-brandmark__asset {
+    width: 2.85rem;
+    height: 2.85rem;
+    object-fit: contain;
+  }
+
+  .nivo-brandmark__label {
+    font-size: 0.9rem;
+    font-weight: 750;
+    letter-spacing: 0.17em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .nivo-brandmark--inverse {
+    color: var(--color-nivo-text-inverse);
+  }
+
+  .nivo-brandmark--inverse .nivo-brandmark__asset {
+    filter: brightness(0) invert(1);
+  }
+
+  .nivo-home-hero,
   .nivo-hero-field {
     position: relative;
     isolation: isolate;
     overflow: hidden;
     background:
-      radial-gradient(circle at 78% 28%, rgb(200 169 81 / 0.19), transparent 20rem),
-      radial-gradient(circle at 98% 90%, rgb(255 255 255 / 0.07), transparent 28rem),
-      linear-gradient(135deg, var(--color-nivo-navy-deep), var(--color-nivo-navy));
+      radial-gradient(circle at 75% 38%, rgb(200 169 81 / 0.17), transparent 19rem),
+      radial-gradient(circle at 20% 110%, rgb(84 113 155 / 0.18), transparent 28rem),
+      linear-gradient(132deg, #04101f 0%, #0b1f3a 58%, #102e53 100%);
   }
 
-  .nivo-hero-field::before,
-  .nivo-hero-field::after {
+  .nivo-home-hero::before,
+  .nivo-hero-field::before {
     position: absolute;
     z-index: -1;
-    border: 1px solid rgb(255 255 255 / 0.1);
+    inset: 1.2rem;
+    border: 1px solid rgb(248 246 240 / 0.08);
     content: '';
     pointer-events: none;
   }
 
-  .nivo-hero-field::before {
-    width: min(56vw, 46rem);
+  .nivo-home-hero::after,
+  .nivo-hero-field::after {
+    position: absolute;
+    z-index: -1;
+    width: min(48vw, 42rem);
     aspect-ratio: 1;
-    top: -16rem;
-    right: -12rem;
+    right: -16rem;
+    bottom: -19rem;
+    border: 1px solid rgb(200 169 81 / 0.24);
     border-radius: 50%;
+    content: '';
+    pointer-events: none;
   }
 
-  .nivo-hero-field::after {
+  .nivo-home-hero-art {
+    position: relative;
+    justify-self: end;
+    width: min(100%, 24rem);
+    filter: drop-shadow(0 2rem 3rem rgb(0 0 0 / 0.4));
+  }
+
+  .nivo-home-hero-art::before {
+    position: absolute;
+    z-index: -1;
+    inset: 14%;
+    border-radius: 50%;
+    background: rgb(200 169 81 / 0.18);
+    box-shadow: 0 0 5rem 2rem rgb(200 169 81 / 0.12);
+    content: '';
+  }
+
+  .nivo-home-hero-art img {
+    width: 100%;
+    height: auto;
+  }
+
+  .nivo-page-hero-art {
+    justify-self: end;
+    width: 13rem;
+    opacity: 0.82;
+  }
+
+  .nivo-page-hero-art img {
+    width: 100%;
+    height: auto;
+    filter: brightness(0) invert(1) drop-shadow(0 1.5rem 1.25rem rgb(0 0 0 / 0.38));
+  }
+
+  .nivo-about-band {
+    position: relative;
+    overflow: hidden;
+    background:
+      linear-gradient(110deg, rgb(4 16 31 / 0.92), rgb(11 31 58 / 0.96)), var(--color-nivo-navy);
+  }
+
+  .nivo-about-band::after {
+    position: absolute;
     width: min(45vw, 36rem);
     aspect-ratio: 1;
-    right: 8%;
-    bottom: -24rem;
-    transform: rotate(45deg);
+    top: -17rem;
+    right: -10rem;
+    border: 1px solid rgb(200 169 81 / 0.26);
+    border-radius: 50%;
+    content: '';
+    pointer-events: none;
+  }
+
+  .nivo-approach-section {
+    background:
+      linear-gradient(90deg, rgb(11 31 58 / 0.045) 1px, transparent 1px),
+      linear-gradient(rgb(11 31 58 / 0.045) 1px, transparent 1px), var(--color-nivo-surface);
+    background-size:
+      2.5rem 2.5rem,
+      2.5rem 2.5rem,
+      auto;
+  }
+
+  .nivo-principle {
+    position: relative;
+  }
+
+  .nivo-principle::before {
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 1.25rem;
+    height: 1px;
+    background: var(--color-nivo-navy);
+    content: '';
+  }
+
+  .nivo-object-display {
+    justify-self: end;
+    width: 11rem;
+  }
+
+  .nivo-object-display img {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 1.5rem 1.25rem rgb(11 31 58 / 0.2));
+  }
+
+  .nivo-divisions-band {
+    background:
+      radial-gradient(circle at 92% 12%, rgb(200 169 81 / 0.15), transparent 17rem),
+      linear-gradient(132deg, #06162a, #0b1f3a);
+  }
+
+  .nivo-divisions-band h2 {
+    color: var(--color-nivo-text-inverse);
+  }
+
+  .nivo-divisions-band .nivo-eyebrow {
+    color: var(--color-nivo-gold);
+  }
+
+  .nivo-divisions-band .nivo-eyebrow::before {
+    background: var(--color-nivo-gold);
+  }
+
+  .nivo-divisions-band > div > div > p {
+    color: var(--color-nivo-text-inverse-muted);
   }
 
   .nivo-card {
     position: relative;
     overflow: hidden;
+    box-shadow: 0 1.5rem 3.25rem rgb(0 0 0 / 0.17);
     transition:
-      border-color 180ms ease,
-      box-shadow 180ms ease,
-      transform 180ms ease;
+      box-shadow 220ms ease,
+      transform 220ms ease,
+      border-color 220ms ease;
   }
 
   .nivo-card::after {
     position: absolute;
-    width: 4.5rem;
-    height: 2px;
-    right: -1.5rem;
-    bottom: 1.75rem;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    width: 3rem;
+    height: 1px;
     background: var(--color-nivo-gold);
     content: '';
-    transition: transform 180ms ease;
+    transition: width 220ms ease;
   }
 
   .nivo-card:hover {
     border-color: var(--color-nivo-gold);
-    box-shadow: 0 1.5rem 3.5rem rgb(11 31 58 / 0.08);
-    transform: translateY(-0.25rem);
+    box-shadow: 0 2rem 4rem rgb(0 0 0 / 0.28);
+    transform: translateY(-0.35rem);
   }
 
   .nivo-card:hover::after {
-    transform: translateX(-1.5rem);
+    width: 5rem;
+  }
+
+  .nivo-cta-surface {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 75% 50%, rgb(200 169 81 / 0.2), transparent 18rem),
+      linear-gradient(118deg, #0b1f3a, #06162a);
+  }
+
+  .nivo-cta-surface::before {
+    position: absolute;
+    width: min(50vw, 46rem);
+    aspect-ratio: 1;
+    right: -20rem;
+    bottom: -27rem;
+    border: 1px solid rgb(248 246 240 / 0.14);
+    border-radius: 50%;
+    content: '';
   }
 
   .nivo-legal-copy h2 {
@@ -309,7 +454,12 @@
 
   @media (max-width: 639px) {
     .nivo-container {
-      width: min(100% - 2.5rem, 76rem);
+      width: min(100% - 2.25rem, 78rem);
+    }
+
+    .nivo-home-hero::before,
+    .nivo-hero-field::before {
+      inset: 0.7rem;
     }
   }
 

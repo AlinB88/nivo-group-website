@@ -152,13 +152,15 @@ export const sections: readonly Section[] = [
     ],
   },
   {
-    id: 'home.about',
+    // Shared by the homepage preview and the canonical /about page.
+    id: 'group.about',
     kind: 'text',
     heading: en(`About ${company.name}`),
     body: [en(company.description)],
   },
   {
-    id: 'home.approach',
+    // Shared by the homepage preview and the canonical /about page.
+    id: 'group.approach',
     kind: 'text',
     heading: en('Our Approach'),
     body: [en(`The principles that shape how ${company.name} works, across every division.`)],

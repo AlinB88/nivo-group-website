@@ -1,0 +1,59 @@
+---
+import type { TextSection } from '../content/sections';
+import { siteConfig } from '../config/site';
+import ApproachCard from './ApproachCard.astro';
+
+interface Props {
+  /** Content-owned section; omitted safely if its registry entry is unavailable. */
+  section?: TextSection;
+
+  /** Optional DOM anchor for a page-level navigation target. */
+  id?: string;
+
+  /** Optional decorative sequence marker for long-form page compositions. */
+  index?: string;
+}
+
+const { section, id, index } = Astro.props;
+---
+
+{
+  section && (
+    <section id={id} class="nivo-approach-section">
+      <div class="nivo-container nivo-section grid gap-10 lg:grid-cols-[11rem_minmax(0,1fr)] lg:gap-16">
+        {index && (
+          <span class="nivo-eyebrow" aria-hidden="true">
+            {index}
+          </span>
+        )}
+
+        <div class:list={[!index && 'lg:col-start-2']}>
+          <h2 class="nivo-rule max-w-2xl text-3xl sm:text-4xl">{section.heading.en}</h2>
+
+          {section.body.map((paragraph) => (
+            <p class="mt-8 max-w-2xl text-lg leading-8 text-nivo-text-muted">{paragraph.en}</p>
+          ))}
+
+          <div class="mt-14 grid gap-10 lg:grid-cols-[minmax(0,1fr)_14rem] lg:items-end">
+            <div class="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+              {siteConfig.approach.map((principle) => (
+                <ApproachCard principle={principle} />
+              ))}
+            </div>
+
+            <figure class="nivo-object-display" aria-hidden="true">
+              <img
+                src="/brand/mascot/nivo-3d-mark.png"
+                alt=""
+                width="1254"
+                height="1254"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}

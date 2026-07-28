@@ -1,6 +1,6 @@
 ---
-import ApproachCard from '../components/ApproachCard.astro';
 import DivisionCard from '../components/DivisionCard.astro';
+import GroupApproachSection from '../components/GroupApproachSection.astro';
 import GroupCallToAction from '../components/GroupCallToAction.astro';
 import { siteConfig } from '../config/site';
 import { getSectionOfKind } from '../content/sections';
@@ -10,8 +10,8 @@ const SLUG = '/';
 
 // Body copy is owned by content/sections.ts — this file only places it.
 const hero = getSectionOfKind('home.hero', 'hero');
-const about = getSectionOfKind('home.about', 'text');
-const approach = getSectionOfKind('home.approach', 'text');
+const about = getSectionOfKind('group.about', 'text');
+const approach = getSectionOfKind('group.approach', 'text');
 const divisions = getSectionOfKind('group.divisions', 'text');
 const contact = getSectionOfKind('group.contact', 'cta');
 
@@ -20,9 +20,9 @@ const [exploreCta, contactCta] = hero?.links ?? [];
 
 <BaseLayout slug={SLUG}>
   <!-- Hero Section -->
-  <section id="hero" class="nivo-hero-field nivo-on-navy">
+  <section id="hero" class="nivo-home-hero nivo-on-navy">
     <div
-      class="nivo-container grid min-h-[42rem] items-end gap-12 py-20 sm:py-28 lg:min-h-[48rem] lg:grid-cols-[minmax(0,1fr)_18rem] lg:py-32"
+      class="nivo-container grid min-h-[42rem] items-center gap-12 py-20 sm:py-28 lg:min-h-[48rem] lg:grid-cols-[minmax(0,1fr)_minmax(16rem,24rem)] lg:py-24"
     >
       <div class="relative z-10">
         <h1 class="nivo-rule nivo-display max-w-4xl text-nivo-text-inverse">
@@ -48,29 +48,36 @@ const [exploreCta, contactCta] = hero?.links ?? [];
         </div>
       </div>
 
-      <div
-        class="hidden justify-self-end text-[18rem] leading-none font-semibold tracking-[-0.12em] text-white/[0.035] lg:block"
-        aria-hidden="true"
-      >
-        N
-      </div>
+      <figure class="nivo-home-hero-art hidden lg:block" aria-hidden="true">
+        <picture>
+          <source media="(min-width: 1024px)" srcset="/brand/mascot/nivo-stamp.png" />
+          <img
+            src="/brand/mascot/nivo-3d-mark.png"
+            alt=""
+            width="1254"
+            height="1254"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+      </figure>
     </div>
   </section>
 
   <!-- About Section -->
-  <section id="about" class="bg-nivo-surface-warm">
+  <section id="about" class="nivo-about-band nivo-on-navy">
     <div
       class="nivo-container nivo-section grid gap-10 lg:grid-cols-[11rem_minmax(0,1fr)] lg:gap-16"
     >
       <span class="nivo-eyebrow" aria-hidden="true">01</span>
       <div>
-        <h2 class="nivo-rule max-w-2xl text-3xl sm:text-4xl">
+        <h2 class="nivo-rule max-w-2xl text-3xl text-nivo-text-inverse sm:text-4xl">
           {about?.heading.en}
         </h2>
 
         {
           about?.body.map((paragraph) => (
-            <p class="mt-8 max-w-3xl text-lg leading-8 text-nivo-text-muted sm:text-xl">
+            <p class="mt-8 max-w-3xl text-lg leading-8 text-nivo-text-inverse-muted sm:text-xl">
               {paragraph.en}
             </p>
           ))
@@ -80,31 +87,10 @@ const [exploreCta, contactCta] = hero?.links ?? [];
   </section>
 
   <!-- Our Approach Section -->
-  <section id="approach" class="bg-nivo-background">
-    <div
-      class="nivo-container nivo-section grid gap-10 lg:grid-cols-[11rem_minmax(0,1fr)] lg:gap-16"
-    >
-      <span class="nivo-eyebrow" aria-hidden="true">02</span>
-      <div>
-        <h2 class="nivo-rule max-w-2xl text-3xl sm:text-4xl">
-          {approach?.heading.en}
-        </h2>
-
-        {
-          approach?.body.map((paragraph) => (
-            <p class="mt-8 max-w-2xl text-lg leading-8 text-nivo-text-muted">{paragraph.en}</p>
-          ))
-        }
-
-        <div class="mt-14 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-          {siteConfig.approach.map((principle) => <ApproachCard principle={principle} />)}
-        </div>
-      </div>
-    </div>
-  </section>
+  <GroupApproachSection section={approach} id="approach" index="02" />
 
   <!-- Divisions Section -->
-  <section id="divisions" class="border-y border-nivo-border bg-nivo-surface">
+  <section id="divisions" class="nivo-divisions-band">
     <div
       class="nivo-container nivo-section grid gap-10 lg:grid-cols-[11rem_minmax(0,1fr)] lg:gap-16"
     >
@@ -116,7 +102,9 @@ const [exploreCta, contactCta] = hero?.links ?? [];
 
         {
           divisions?.body.map((paragraph) => (
-            <p class="mt-8 max-w-2xl text-lg leading-8 text-nivo-text-muted">{paragraph.en}</p>
+            <p class="mt-8 max-w-2xl text-lg leading-8 text-nivo-text-inverse-muted">
+              {paragraph.en}
+            </p>
           ))
         }
 
