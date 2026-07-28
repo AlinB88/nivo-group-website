@@ -1,11 +1,11 @@
 # Nivo 3D asset drop zone
 
-The current temporary renders are already present:
+The current source renders are already present alongside their web-ready cutouts:
 
-- `nivo-base.png` — the base Nivo render used in the Hero and IT chapters.
-- `nivo-advisor.png` — the glasses-and-tie render used in the Advisor chapter.
-- `nivo-it.png` — the supplied IT source render, retained unchanged.
-- `nivo-it-cutout.png` — the transparent IT render used in the IT and Logistics chapters.
+- `nivo-base.png` and `nivo-base-cutout.png` — Base Nivo source and transparent Hero render.
+- `nivo-advisor.png` and `nivo-advisor-cutout.png` — Advisor Nivo source and transparent Advisor render.
+- `nivo-it.png` and `nivo-it-cutout.png` — IT Nivo source and transparent IT render.
+- `nivo-logistics.png` and `nivo-logistics-cutout.png` — Logistics Nivo source and transparent Logistics render.
 
 Place the exported Spline file here later as `nivo-scene.splinecode`.
 
@@ -15,6 +15,6 @@ Model the wardrobe as three approved states:
 - Advisor Nivo — glasses and tie
 - IT Nivo — IT outfit
 
-Keep Logistics unmodelled for now. The website intentionally retains the IT wardrobe during that chapter and shows a Coming Soon label.
+The Logistics wardrobe is now available visually. Its chapter copy still carries the Coming Soon label until the approved Logistics story is ready.
 
 For scroll-linked control, expose a Spline Number variable named `scrollProgress` from `0` to `1`. Map it smoothly across the three wardrobe states rather than using discrete triggers.

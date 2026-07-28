@@ -451,6 +451,10 @@ body[data-chapter='logistics'] .scene-motif--logistics {
   opacity: 0;
   transform: translateX(-50%) translateY(1.2rem) scale(0.96);
 }
+.nivo-render--logistics {
+  opacity: 0;
+  transform: translateX(-50%) translateY(1.2rem) scale(0.96);
+}
 .nivo-spline-canvas {
   position: absolute;
   z-index: 2;
@@ -483,6 +487,17 @@ body[data-wardrobe='it'] .nivo-render--it {
   opacity: 1;
   transform: translateX(-50%) translateY(0) scale(1);
   filter: drop-shadow(0 0 2rem rgb(105 223 238 / 26%));
+}
+body[data-wardrobe='logistics'] .nivo-render--base,
+body[data-wardrobe='logistics'] .nivo-render--advisor,
+body[data-wardrobe='logistics'] .nivo-render--it {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-1.2rem) scale(1.02);
+}
+body[data-wardrobe='logistics'] .nivo-render--logistics {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
+  filter: drop-shadow(0 0 2rem rgb(229 164 82 / 26%));
 }
 body[data-chapter='hero'] .scene-shell__backdrop::before {
   animation: base-field 17s ease-in-out infinite alternate;
