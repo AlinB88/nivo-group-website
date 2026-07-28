@@ -79,7 +79,7 @@ Prioritize static performance and avoid unnecessary runtime work.
 
 ## Public routes and publication
 
-Published routes are `/`, `/divisions`, `/contact`, `/privacy`,
+Published routes are `/`, `/about`, `/divisions`, `/contact`, `/privacy`,
 `/terms`, and the no-index `/404` fallback. Planned routes stay unbuilt
 until their required content is approved.
 
