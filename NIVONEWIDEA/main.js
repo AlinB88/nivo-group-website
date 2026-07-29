@@ -1,94 +1,102 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
+import { brand, locales } from './content.js';
 import './styles.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * Add the exported Spline scene at this path when the real Nivo model is ready.
- * Keep null until then: the cinematic CSS stand-in remains visible and no request
- * is made for a missing file.
- */
-const NIVO_SCENE_URL = null;
-
-/**
- * Add a real Lottie JSON path here only when a motion asset is approved.
- * The project deliberately ships with no invented animation asset.
- */
-const LOTTIE_ASSET_URL = null;
-
-const chapters = [...document.querySelectorAll('[data-chapter]')];
+const chapterContainer = document.querySelector('[data-chapters]');
+const footer = document.querySelector('[data-footer]');
 const caption = document.querySelector('[data-scene-caption]');
 const kicker = document.querySelector('[data-scene-kicker]');
 const sceneNumber = document.querySelector('[data-scene-number]');
 const sceneProgress = document.querySelector('[data-scene-progress]');
-const splineCanvas = document.querySelector('#nivo-spline-canvas');
+const headerChapter = document.querySelector('[data-header-chapter]');
+const headerStatus = document.querySelector('.header-status');
+const languageSwitch = document.querySelector('[data-language-switch]');
+let activeLocale = window.localStorage.getItem('nivo-locale') === 'ar' ? 'ar' : 'en';
 
-const chapterDetails = {
-  hero: {
-    number: '01',
-    label: '01 / BASE NIVO',
-    caption: 'The beginning of every direction.',
-  },
-  advisor: {
-    number: '02',
-    label: '02 / ADVISOR NIVO',
-    caption: 'Glasses and a tie, introduced with intent.',
-  },
-  it: {
-    number: '03',
-    label: '03 / IT NIVO',
-    caption: 'A different wardrobe for a different chapter.',
-  },
-  logistics: {
-    number: '04',
-    label: '04 / LOGISTICS',
-    caption: 'The next wardrobe is still to come.',
-  },
-};
+function titleMarkup(lines, level) {
+  return `<${level}>${lines.map((line) => `<span>${line}</span>`).join('')}</${level}>`;
+}
 
-let splineApp = null;
+function chapterMarkup(chapter, index, chapters) {
+  const headingLevel = index === 0 ? 'h1' : 'h2';
+  const target = index < chapters.length - 1 ? `#${chapters[index + 1].id}` : '#top';
+
+  return `
+    <section id="${chapter.id}" class="chapter chapter--${chapter.id}" data-chapter="${chapter.id}" data-wardrobe="${chapter.wardrobe}">
+      <div class="chapter__content">
+        <p class="eyebrow">${chapter.eyebrow}</p>
+        ${titleMarkup(chapter.title, headingLevel)}
+        <p class="chapter__lede">${chapter.description}</p>
+        <p class="chapter__note">${chapter.note}</p>
+        <a class="chapter__link" href="${target}"><span>${chapter.label}</span><i aria-hidden="true"></i></a>
+      </div>
+      <p class="chapter__index" aria-hidden="true">${chapter.number}</p>
+    </section>
+    ${index < chapters.length - 1 ? '<div class="chapter-divider" aria-hidden="true"><span></span><i></i><span></span></div>' : ''}
+  `;
+}
+
+function renderContent() {
+  const locale = locales[activeLocale];
+  chapterContainer.innerHTML = locale.chapters
+    .map((chapter, index) => chapterMarkup(chapter, index, locale.chapters))
+    .join('');
+  footer.innerHTML = `
+    <a class="wordmark" href="#top" aria-label="${brand.groupName} home">${brand.name}</a>
+    <p>${locale.footer.statement}</p>
+    <a class="footer-link" href="#top">${locale.footer.backToTop} <span aria-hidden="true">↗</span></a>
+  `;
+  document.documentElement.lang = locale.lang;
+  document.documentElement.dir = locale.dir;
+  document.title = locale.meta.title;
+  document
+    .querySelector('meta[name="description"]')
+    .setAttribute('content', locale.meta.description);
+  headerStatus.lastChild.textContent = ` ${locale.header.status}`;
+  languageSwitch.textContent = locale.header.switchLabel;
+  languageSwitch.setAttribute('aria-label', locale.header.switchAria);
+}
 
 function setSceneProgress(progress) {
   const normalized = Math.max(0, Math.min(progress, 1));
   document.documentElement.style.setProperty('--story-progress', normalized.toFixed(4));
   sceneProgress.style.transform = `scaleX(${normalized})`;
-
-  // An exported Spline scene can consume this variable to mirror the browser scroll.
-  // Configure a Number variable named "scrollProgress" in Spline (0–1).
-  if (splineApp && typeof splineApp.setVariable === 'function') {
-    splineApp.setVariable('scrollProgress', normalized);
-  }
 }
 
 function activateChapter(element) {
-  const chapter = element.dataset.chapter;
-  const wardrobe = element.dataset.wardrobe;
-  const details = chapterDetails[chapter];
+  const chapter = locales[activeLocale].chapters.find(
+    (item) => item.id === element.dataset.chapter,
+  );
+  if (!chapter) return;
 
-  document.body.dataset.chapter = chapter;
-  document.body.dataset.wardrobe = wardrobe;
-  kicker.textContent = details.label;
-  caption.textContent = details.caption;
-  sceneNumber.textContent = details.number;
+  document.body.dataset.chapter = chapter.id;
+  document.body.dataset.wardrobe = chapter.wardrobe;
+  kicker.textContent = `${chapter.number} / ${chapter.id === 'hero' ? brand.name : chapter.id.toUpperCase()}`;
+  caption.textContent = chapter.sceneCaption;
+  sceneNumber.textContent = chapter.number;
+  headerChapter.textContent = `${chapter.number} / 04`;
 }
 
 function setupScrollStory() {
+  const chapters = [...document.querySelectorAll('[data-chapter]')];
   const story = document.querySelector('.chapters');
 
+  activateChapter(chapters[0]);
   ScrollTrigger.create({
     trigger: story,
     start: 'top bottom',
     end: 'bottom top',
     onUpdate: (self) => setSceneProgress(self.progress),
   });
-
   chapters.forEach((chapter) => {
     ScrollTrigger.create({
       trigger: chapter,
-      start: 'top 52%',
-      end: 'bottom 52%',
+      start: 'top 55%',
+      end: 'bottom 55%',
       onEnter: () => activateChapter(chapter),
       onEnterBack: () => activateChapter(chapter),
     });
@@ -97,51 +105,22 @@ function setupScrollStory() {
 
 function setupSmoothScroll() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  const lenis = new Lenis({
-    duration: 1.05,
-    smoothWheel: true,
-    syncTouch: false,
-  });
-
+  const lenis = new Lenis({ duration: 1.05, smoothWheel: true, syncTouch: false });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
 }
 
-async function setupSpline() {
-  if (!NIVO_SCENE_URL) return;
-
-  try {
-    const { Application } = await import('@splinetool/runtime');
-    splineApp = new Application(splineCanvas);
-    await splineApp.load(NIVO_SCENE_URL);
-    splineCanvas.classList.add('is-ready');
-    setSceneProgress(
-      Number.parseFloat(
-        getComputedStyle(document.documentElement).getPropertyValue('--story-progress'),
-      ) || 0,
-    );
-  } catch {
-    // Keep the already-visible image fallback in place if an exported scene is unavailable.
-    document.body.dataset.spline = 'unavailable';
-  }
+function changeLanguage() {
+  ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+  activeLocale = activeLocale === 'en' ? 'ar' : 'en';
+  window.localStorage.setItem('nivo-locale', activeLocale);
+  renderContent();
+  setupScrollStory();
+  window.scrollTo(0, 0);
 }
 
-async function setupLottie() {
-  if (!LOTTIE_ASSET_URL) return;
-
-  const { default: lottie } = await import('lottie-web');
-  lottie.loadAnimation({
-    container: document.querySelector('.scroll-cue i'),
-    renderer: 'svg',
-    loop: true,
-    autoplay: true,
-    path: LOTTIE_ASSET_URL,
-  });
-}
-
+renderContent();
 setupSmoothScroll();
 setupScrollStory();
-setupSpline();
-setupLottie();
+languageSwitch.addEventListener('click', changeLanguage);
