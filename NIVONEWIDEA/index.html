@@ -11,19 +11,24 @@
     <title>NIVO Group — A clearer way forward</title>
   </head>
   <body data-wardrobe="base" data-chapter="hero">
-    <a class="skip-link" href="#chapters">Skip to chapters</a>
+    <a class="skip-link" href="#chapters" data-skip-link>Skip to chapters</a>
 
     <header class="site-header" data-header>
       <p class="header-status"><i aria-hidden="true"></i> In development</p>
-      <a class="wordmark" href="#top" aria-label="NIVO Group home">NIVO</a>
+      <a class="wordmark" href="#top" aria-label="NIVO Group home" data-home-link>NIVO</a>
       <div class="header-actions">
         <button class="language-switch" type="button" data-language-switch></button>
         <p class="header-chapter" data-header-chapter>01 / 04</p>
       </div>
     </header>
+    <nav class="story-nav" aria-label="Chapter navigation" data-story-nav></nav>
 
     <main id="top">
-      <section class="scene-shell" aria-label="NIVO character progression">
+      <section
+        class="scene-shell"
+        aria-label="NIVO character progression"
+        data-scene-shell
+      >
         <div class="scene-shell__backdrop" aria-hidden="true"></div>
         <div class="scene-shell__grain" aria-hidden="true"></div>
         <div class="scene-motifs" aria-hidden="true">
@@ -105,6 +110,7 @@
     </main>
 
     <footer class="site-footer" data-footer></footer>
+    <p class="language-announcement" aria-live="polite" data-language-announcement></p>
     <script type="module" src="/main.js"></script>
   </body>
 </html>

@@ -118,19 +118,95 @@ a:focus-visible {
   pointer-events: auto;
 }
 .language-switch {
-  min-width: 2.3rem;
+  display: inline-grid;
+  width: 2.1rem;
+  height: 2.1rem;
+  place-items: center;
   padding: 0;
-  border: 0;
-  background: transparent;
+  border: 1px solid rgb(244 243 239 / 22%);
+  border-radius: 50%;
+  background: rgb(5 9 21 / 30%);
   color: var(--ink);
   cursor: pointer;
-  font: inherit;
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+.language-switch svg {
+  width: 0.96rem;
+  height: 0.96rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.35;
 }
 .language-switch:hover {
+  border-color: var(--gold);
+  background: rgb(215 177 108 / 12%);
   color: var(--gold);
+  transform: rotate(12deg);
+}
+.language-switch:focus-visible {
+  outline-offset: 3px;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.language-announcement {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.story-nav {
+  position: fixed;
+  z-index: 11;
+  top: 50%;
+  right: clamp(1.25rem, 4vw, 5rem);
+  display: grid;
+  gap: 0.65rem;
+  transform: translateY(-50%);
+}
+.story-nav a {
+  display: grid;
+  grid-template-columns: 1.6rem 0.9rem;
+  align-items: center;
+  gap: 0.45rem;
+  color: rgb(244 243 239 / 42%);
+  font-size: 0.54rem;
+  font-weight: 750;
+  letter-spacing: 0.09em;
+  transition: color 220ms ease;
+}
+.story-nav i {
+  display: block;
+  width: 0.8rem;
+  height: 1px;
+  background: currentColor;
+  transform-origin: left;
+  transition:
+    width 220ms ease,
+    background 220ms ease;
+}
+.story-nav a:hover,
+.story-nav a[aria-current] {
+  color: var(--gold);
+}
+.story-nav a[aria-current] i {
+  width: 1.8rem;
 }
 
 .scene-shell {
@@ -312,9 +388,9 @@ body[data-chapter] .scene-particles i {
 
 .nivo-stage {
   position: absolute;
-  top: 49%;
-  left: 61%;
-  width: min(58vw, 46rem);
+  top: 54%;
+  left: 50%;
+  width: min(46vw, 36rem);
   aspect-ratio: 1 / 1.2;
   transform: translate(-50%, -50%);
 }
@@ -464,6 +540,8 @@ body[data-chapter='logistics'] .scene-shell__backdrop::before {
   grid-column: 1;
   align-self: end;
   max-width: 35rem;
+  position: relative;
+  z-index: 2;
 }
 .eyebrow,
 .chapter__note {
@@ -529,6 +607,33 @@ h2 span {
   border-right: 1px solid var(--gold);
   transform: rotate(45deg);
   content: '';
+}
+.chapter__link:hover {
+  color: var(--gold);
+}
+.chapter__link:hover i {
+  width: 3rem;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 220ms;
+}
+::view-transition-old(root) {
+  animation-name: nivo-fade-out;
+}
+::view-transition-new(root) {
+  animation-name: nivo-fade-in;
+}
+@keyframes nivo-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes nivo-fade-in {
+  from {
+    opacity: 0;
+  }
 }
 .chapter__index {
   position: absolute;
@@ -622,9 +727,9 @@ h2 span {
     bottom: 5%;
   }
   .nivo-stage {
-    top: 35%;
+    top: 49%;
     left: 50%;
-    width: min(100vw, 33rem);
+    width: min(82vw, 26rem);
   }
   .nivo-stage__halo {
     width: 88%;
@@ -662,6 +767,9 @@ h2 span {
   .footer-link {
     grid-column: 2;
   }
+  .story-nav {
+    display: none;
+  }
 }
 
 @media (max-width: 430px) {
@@ -682,13 +790,19 @@ h2 span {
 [dir='rtl'] .header-status {
   direction: rtl;
 }
+[dir='rtl'] .story-nav {
+  right: auto;
+  left: clamp(1.25rem, 4vw, 5rem);
+}
 [dir='rtl'] .chapter {
   direction: rtl;
 }
 [dir='rtl'] .chapter__content {
-  grid-column: 2;
-  justify-self: end;
+  grid-column: 1;
+  justify-self: start;
+  max-width: 30rem;
   text-align: right;
+  text-shadow: 0 0.2rem 2.8rem rgb(2 5 13 / 88%);
 }
 [dir='rtl'] .chapter__lede {
   margin-right: 0;
@@ -725,6 +839,32 @@ h2 span {
 }
 [dir='rtl'] .footer-link {
   justify-self: start;
+}
+
+@media (max-width: 1024px) and (min-width: 721px) {
+  .nivo-stage {
+    top: 50%;
+    left: 50%;
+    width: min(46vw, 29rem);
+  }
+  .chapter {
+    min-height: 105svh;
+    padding-bottom: clamp(4.75rem, 8vh, 6.5rem);
+  }
+  .chapter__content {
+    max-width: 29rem;
+  }
+  h1,
+  h2 {
+    font-size: clamp(3.5rem, 6.2vw, 5.4rem);
+  }
+  .story-nav {
+    right: 1.25rem;
+  }
+  [dir='rtl'] .story-nav {
+    right: auto;
+    left: 1.25rem;
+  }
 }
 
 @media (max-width: 720px) {

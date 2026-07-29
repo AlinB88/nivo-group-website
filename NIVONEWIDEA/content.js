@@ -19,6 +19,13 @@ export const locales = {
       switchLabel: 'العربية',
       switchAria: 'Switch to Arabic',
     },
+    accessibility: {
+      skip: 'Skip to chapters',
+      home: 'NIVO Group home',
+      scene: 'NIVO character progression',
+      chapterNavigation: 'Chapter navigation',
+      languageAnnouncement: 'English experience selected.',
+    },
     footer: {
       statement: 'Guidance for business, in development.',
       backToTop: 'Back to top',
@@ -85,6 +92,13 @@ export const locales = {
       status: 'قيد التطوير',
       switchLabel: 'EN',
       switchAria: 'التبديل إلى اللغة الإنجليزية',
+    },
+    accessibility: {
+      skip: 'انتقل إلى الفصول',
+      home: 'الصفحة الرئيسية لمجموعة نيفو',
+      scene: 'رحلة شخصية نيفو',
+      chapterNavigation: 'التنقل بين الفصول',
+      languageAnnouncement: 'تم اختيار التجربة العربية.',
     },
     footer: { statement: 'إرشاد للأعمال، قيد التطوير.', backToTop: 'العودة إلى الأعلى' },
     chapters: [
