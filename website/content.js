@@ -25,6 +25,7 @@ export const locales = {
       scene: 'NIVO character progression',
       chapterNavigation: 'Chapter navigation',
       languageAnnouncement: 'English experience selected.',
+      swipeHint: 'Swipe to explore',
     },
     footer: {
       statement: 'Guidance for business, in development.',
@@ -99,6 +100,7 @@ export const locales = {
       scene: 'رحلة شخصية نيفو',
       chapterNavigation: 'التنقل بين الفصول',
       languageAnnouncement: 'تم اختيار التجربة العربية.',
+      swipeHint: 'اسحب للاستكشاف',
     },
     footer: { statement: 'إرشاد للأعمال، قيد التطوير.', backToTop: 'العودة إلى الأعلى' },
     chapters: [
@@ -110,7 +112,7 @@ export const locales = {
         title: ['طريق أوضح', 'إلى الأمام.'],
         description:
           'نيفو هو المساعد والمرشد والصديق والشريك لأصحاب الأعمال عند التعامل مع أعمال تتطلب العناية والخصوصية وقرارات واثقة.',
-        note: 'مبني على الثقة، لا على الضوضاء.',
+        note: '',
         sceneCaption: 'دليل هادئ للأعمال المهمة.',
         label: 'ابدأ الرحلة',
       },

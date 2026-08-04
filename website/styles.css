@@ -369,7 +369,7 @@ body[data-chapter] .scene-particles i {
   max-width: 120%;
   margin: 0;
   color: var(--gold);
-  font-size: 0.62rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -556,6 +556,9 @@ body[data-chapter='logistics'] .scene-shell__backdrop::before {
   scrollbar-width: none;
   touch-action: pan-x;
 }
+[dir='rtl'] .chapters {
+  direction: rtl;
+}
 .chapters::-webkit-scrollbar {
   display: none;
 }
@@ -598,20 +601,15 @@ body[data-chapter='logistics'] .scene-shell__backdrop::before {
 }
 .chapter__note {
   position: absolute;
-  z-index: 2;
+  z-index: 0;
   top: 50%;
   right: clamp(1.25rem, 4vw, 5rem);
   max-width: min(14rem, 17vw);
   margin: 0;
   text-align: left;
+  opacity: 0.48;
+  pointer-events: none;
   transform: translateY(-50%);
-}
-.chapter--advisor h2 {
-  position: absolute;
-  z-index: 2;
-  top: clamp(6rem, 12vh, 8rem);
-  left: clamp(1.25rem, 4vw, 5rem);
-  max-width: min(29rem, 42vw);
 }
 h1,
 h2 {
@@ -623,9 +621,13 @@ h2 {
   letter-spacing: -0.065em;
   line-height: 0.88;
 }
-h1 span,
-h2 span {
-  display: block;
+.chapter__title {
+  position: absolute;
+  z-index: 2;
+  top: clamp(6rem, 12vh, 8rem);
+  left: clamp(1.25rem, 4vw, 5rem);
+  max-width: min(34rem, 43vw);
+  margin: 0;
 }
 .chapter__lede {
   max-width: 31rem;
@@ -651,7 +653,7 @@ h2 span {
 }
 .chapter__note {
   color: rgb(244 243 239 / 67%);
-  font-size: 0.57rem;
+  font-size: 0.72rem;
 }
 .chapter__link {
   display: inline-flex;
@@ -687,6 +689,39 @@ h2 span {
 }
 .chapter__link:hover i {
   width: 3rem;
+}
+.swipe-hint {
+  position: absolute;
+  bottom: 9%;
+  left: 50%;
+  z-index: 4;
+  display: none;
+  align-items: center;
+  gap: 0.55rem;
+  width: max-content;
+  margin: 0;
+  color: rgb(244 243 239 / 64%);
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%);
+  transition: opacity 300ms ease;
+}
+.swipe-hint > span:first-child {
+  color: var(--gold);
+  font-size: 0.8rem;
+  animation: swipe-prompt 1.2s ease-in-out infinite;
+}
+body[data-swipe-hint='visible'] .swipe-hint {
+  opacity: 1;
+}
+@keyframes swipe-prompt {
+  50% {
+    transform: translateX(-0.35rem);
+  }
 }
 
 ::view-transition-old(root),
@@ -767,11 +802,11 @@ h2 span {
   .nivo-stage {
     top: 50%;
     left: 50%;
-    width: clamp(10rem, 40vw, 15rem);
+    width: clamp(11rem, 48vw, 18rem);
   }
   .nivo-stage__label {
     bottom: -1.9rem;
-    font-size: 0.54rem;
+    font-size: 0.67rem;
   }
   .nivo-stage__halo {
     width: 88%;
@@ -797,14 +832,17 @@ h2 span {
   .chapter__note {
     top: 52%;
     right: 1.25rem;
-    max-width: 7.5rem;
-    font-size: 0.5rem;
+    max-width: 8.75rem;
+    font-size: 0.64rem;
     line-height: 1.55;
   }
-  .chapter--advisor h2 {
+  .chapter__title {
     top: 6.25rem;
     left: 1.25rem;
     max-width: calc(100vw - 2.5rem);
+  }
+  .swipe-hint {
+    display: inline-flex;
   }
   .chapter__link {
     position: absolute;
@@ -866,7 +904,7 @@ h2 span {
   left: clamp(1.25rem, 4vw, 5rem);
   text-align: right;
 }
-[dir='rtl'] .chapter--advisor h2 {
+[dir='rtl'] .chapter__title {
   right: clamp(1.25rem, 4vw, 5rem);
   left: auto;
   text-align: right;
@@ -886,6 +924,10 @@ h2 span {
   right: auto;
   left: 0;
   transform: rotate(-135deg);
+}
+[dir='rtl'] .swipe-hint > span:first-child {
+  animation-direction: reverse;
+  transform: scaleX(-1);
 }
 [dir='rtl'] .site-footer {
   direction: rtl;
@@ -932,7 +974,7 @@ h2 span {
     right: auto;
     left: 1.25rem;
   }
-  [dir='rtl'] .chapter--advisor h2 {
+  [dir='rtl'] .chapter__title {
     right: 1.25rem;
     left: auto;
   }

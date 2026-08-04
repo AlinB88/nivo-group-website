@@ -13,6 +13,7 @@ const skipLink = document.querySelector('[data-skip-link]');
 const homeLink = document.querySelector('[data-home-link]');
 const sceneShell = document.querySelector('[data-scene-shell]');
 const languageAnnouncement = document.querySelector('[data-language-announcement]');
+const swipeHintText = document.querySelector('[data-swipe-hint-text]');
 const pageContent = [...document.body.children].filter(
   (element) => element !== languageGate && element.tagName !== 'SCRIPT',
 );
@@ -20,9 +21,10 @@ const localeFromUrl = new URLSearchParams(window.location.search).get('lang');
 let activeLocale = localeFromUrl === 'ar' ? 'ar' : localeFromUrl === 'en' ? 'en' : 'en';
 let activeChapterId = null;
 let typingTimer;
+let swipeHintTimer;
 
 function titleMarkup(lines, level) {
-  return `<${level}>${lines.map((line) => `<span>${line}</span>`).join('')}</${level}>`;
+  return `<${level} class="chapter__title">${lines.join(' ')}</${level}>`;
 }
 
 function chapterMarkup(chapter, index, chapters) {
@@ -31,8 +33,8 @@ function chapterMarkup(chapter, index, chapters) {
 
   return `
     <section id="${chapter.id}" class="chapter chapter--${chapter.id}" data-chapter="${chapter.id}" data-wardrobe="${chapter.wardrobe}">
+      ${titleMarkup(chapter.title, headingLevel)}
       <div class="chapter__content">
-        ${titleMarkup(chapter.title, headingLevel)}
         <p class="chapter__lede" data-typed-copy>${chapter.description}</p>
         <a class="chapter__link" href="${target}"><span>${chapter.label}</span><i aria-hidden="true"></i></a>
       </div>
@@ -65,6 +67,7 @@ function renderContent() {
   sceneShell.setAttribute('aria-label', locale.accessibility.scene);
   storyNavigation.setAttribute('aria-label', locale.accessibility.chapterNavigation);
   chapterContainer.setAttribute('aria-label', locale.accessibility.chapterNavigation);
+  swipeHintText.textContent = locale.accessibility.swipeHint;
   storyNavigation.innerHTML = locale.chapters
     .map(
       (chapter) => `
@@ -105,6 +108,15 @@ function setSceneProgress(progress) {
   sceneProgress.style.transform = `scaleX(${normalized})`;
 }
 
+function isRtlStory() {
+  return document.documentElement.dir === 'rtl';
+}
+
+function logicalScrollLeft(index) {
+  const offset = index * chapterContainer.clientWidth;
+  return isRtlStory() ? -offset : offset;
+}
+
 function activateChapter(element) {
   const chapter = locales[activeLocale].chapters.find(
     (item) => item.id === element.dataset.chapter,
@@ -134,20 +146,30 @@ function scrollToChapter(index, behavior = 'smooth') {
   if (!target) return;
 
   chapterContainer.scrollTo({
-    left: target.offsetLeft,
+    left: logicalScrollLeft(chapters.indexOf(target)),
     behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
       ? 'auto'
       : behavior,
   });
 }
 
+function resetStoryToFirstChapter() {
+  window.requestAnimationFrame(() => {
+    scrollToChapter(0, 'auto');
+    updateHorizontalStory();
+  });
+}
+
 function updateHorizontalStory() {
   const chapters = getChapters();
   const maxScroll = chapterContainer.scrollWidth - chapterContainer.clientWidth;
-  const progress = maxScroll > 0 ? chapterContainer.scrollLeft / maxScroll : 0;
+  const storyOffset = isRtlStory()
+    ? -chapterContainer.scrollLeft
+    : chapterContainer.scrollLeft;
+  const progress = maxScroll > 0 ? storyOffset / maxScroll : 0;
   const chapterIndex = Math.min(
     chapters.length - 1,
-    Math.max(0, Math.round(chapterContainer.scrollLeft / chapterContainer.clientWidth)),
+    Math.max(0, Math.round(storyOffset / chapterContainer.clientWidth)),
   );
 
   setSceneProgress(progress);
@@ -156,7 +178,7 @@ function updateHorizontalStory() {
 
 function setupHorizontalStory() {
   activateChapter(getChapters()[0]);
-  updateHorizontalStory();
+  resetStoryToFirstChapter();
 
   document.addEventListener(
     'wheel',
@@ -166,7 +188,10 @@ function setupHorizontalStory() {
         Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
       if (!travel) return;
       event.preventDefault();
-      chapterContainer.scrollBy({ left: travel, behavior: 'auto' });
+      chapterContainer.scrollBy({
+        left: isRtlStory() ? -travel : travel,
+        behavior: 'auto',
+      });
     },
     { passive: false },
   );
@@ -174,9 +199,10 @@ function setupHorizontalStory() {
   document.addEventListener('keydown', (event) => {
     if (!languageGate.hidden) return;
     if (event.target.closest('input, textarea, select, [contenteditable="true"]')) return;
-    const currentIndex = Math.round(
-      chapterContainer.scrollLeft / chapterContainer.clientWidth,
-    );
+    const storyOffset = isRtlStory()
+      ? -chapterContainer.scrollLeft
+      : chapterContainer.scrollLeft;
+    const currentIndex = Math.round(storyOffset / chapterContainer.clientWidth);
     const actions = {
       ArrowRight: () => scrollToChapter(currentIndex + 1),
       ArrowLeft: () => scrollToChapter(currentIndex - 1),
@@ -223,8 +249,7 @@ function selectLanguage(nextLocale) {
     nextUrl.searchParams.set('lang', nextLocale);
     window.history.replaceState({}, '', nextUrl);
     renderContent();
-    chapterContainer.scrollTo({ left: 0, behavior: 'auto' });
-    updateHorizontalStory();
+    resetStoryToFirstChapter();
     languageAnnouncement.textContent =
       locales[activeLocale].accessibility.languageAnnouncement;
   };
@@ -240,6 +265,14 @@ function selectLanguage(nextLocale) {
   updateLanguage();
 }
 
+function showSwipeHint() {
+  window.clearTimeout(swipeHintTimer);
+  document.body.dataset.swipeHint = 'visible';
+  swipeHintTimer = window.setTimeout(() => {
+    delete document.body.dataset.swipeHint;
+  }, 5200);
+}
+
 function closeLanguageGate() {
   languageGate.classList.add('is-leaving');
   window.setTimeout(
@@ -248,6 +281,7 @@ function closeLanguageGate() {
       pageContent.forEach((element) => {
         element.inert = false;
       });
+      showSwipeHint();
       chapterContainer.focus({ preventScroll: true });
     },
     window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 360,
