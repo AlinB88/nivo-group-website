@@ -1,10 +1,5 @@
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Lenis from 'lenis';
 import { brand, locales } from './content.js';
 import './styles.css';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const chapterContainer = document.querySelector('[data-chapters]');
 const footer = document.querySelector('[data-footer]');
@@ -63,6 +58,7 @@ function renderContent() {
     <p>${locale.footer.statement}</p>
     <a class="footer-link" href="#top">${locale.footer.backToTop} <span aria-hidden="true">↗</span></a>
   `;
+  chapterContainer.append(footer);
   document.documentElement.lang = locale.lang;
   document.documentElement.dir = locale.dir;
   document.title = locale.meta.title;
@@ -83,6 +79,7 @@ function renderContent() {
     <span class="visually-hidden">${locale.header.switchAria}</span>
   `;
   storyNavigation.setAttribute('aria-label', locale.accessibility.chapterNavigation);
+  chapterContainer.setAttribute('aria-label', locale.accessibility.chapterNavigation);
   storyNavigation.innerHTML = locale.chapters
     .map(
       (chapter) => `
@@ -116,47 +113,104 @@ function activateChapter(element) {
   });
 }
 
-function setupScrollStory() {
-  const chapters = [...document.querySelectorAll('[data-chapter]')];
-  const story = document.querySelector('.chapters');
+function getChapters() {
+  return [...chapterContainer.querySelectorAll('[data-chapter]')];
+}
 
-  activateChapter(chapters[0]);
-  ScrollTrigger.create({
-    trigger: story,
-    start: 'top bottom',
-    end: 'bottom top',
-    onUpdate: (self) => setSceneProgress(self.progress),
-  });
-  chapters.forEach((chapter) => {
-    ScrollTrigger.create({
-      trigger: chapter,
-      start: 'top 55%',
-      end: 'bottom 55%',
-      onEnter: () => activateChapter(chapter),
-      onEnterBack: () => activateChapter(chapter),
-    });
+function scrollToChapter(index, behavior = 'smooth') {
+  const chapters = getChapters();
+  const target = chapters[Math.max(0, Math.min(index, chapters.length - 1))];
+  if (!target) return;
+
+  chapterContainer.scrollTo({
+    left: target.offsetLeft,
+    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ? 'auto'
+      : behavior,
   });
 }
 
-function setupSmoothScroll() {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const lenis = new Lenis({ duration: 1.05, smoothWheel: true, syncTouch: false });
-  lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add((time) => lenis.raf(time * 1000));
-  gsap.ticker.lagSmoothing(0);
+function updateHorizontalStory() {
+  const chapters = getChapters();
+  const maxScroll = chapterContainer.scrollWidth - chapterContainer.clientWidth;
+  const progress = maxScroll > 0 ? chapterContainer.scrollLeft / maxScroll : 0;
+  const chapterIndex = Math.min(
+    chapters.length - 1,
+    Math.max(0, Math.round(chapterContainer.scrollLeft / chapterContainer.clientWidth)),
+  );
+
+  setSceneProgress(progress);
+  if (chapters[chapterIndex]) activateChapter(chapters[chapterIndex]);
+}
+
+function setupHorizontalStory() {
+  activateChapter(getChapters()[0]);
+  updateHorizontalStory();
+
+  document.addEventListener(
+    'wheel',
+    (event) => {
+      const travel =
+        Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+      if (!travel) return;
+      event.preventDefault();
+      chapterContainer.scrollBy({ left: travel, behavior: 'auto' });
+    },
+    { passive: false },
+  );
+  chapterContainer.addEventListener('scroll', updateHorizontalStory, { passive: true });
+  document.addEventListener('keydown', (event) => {
+    if (event.target.closest('input, textarea, select, [contenteditable="true"]')) return;
+    const currentIndex = Math.round(
+      chapterContainer.scrollLeft / chapterContainer.clientWidth,
+    );
+    const actions = {
+      ArrowRight: () => scrollToChapter(currentIndex + 1),
+      ArrowLeft: () => scrollToChapter(currentIndex - 1),
+      PageDown: () => scrollToChapter(currentIndex + 1),
+      PageUp: () => scrollToChapter(currentIndex - 1),
+      Home: () => scrollToChapter(0),
+      End: () => scrollToChapter(getChapters().length - 1),
+    };
+    const action = actions[event.key];
+    if (!action) return;
+    event.preventDefault();
+    action();
+  });
+
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link) return;
+    const targetId = link.getAttribute('href');
+    if (targetId === '#chapters') {
+      event.preventDefault();
+      chapterContainer.focus({ preventScroll: true });
+      return;
+    }
+    if (targetId === '#top') {
+      event.preventDefault();
+      scrollToChapter(0);
+      return;
+    }
+    const targetIndex = getChapters().findIndex(
+      (chapter) => `#${chapter.id}` === targetId,
+    );
+    if (targetIndex < 0) return;
+    event.preventDefault();
+    scrollToChapter(targetIndex);
+  });
 }
 
 function changeLanguage() {
   const updateLanguage = () => {
-    ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     activeLocale = activeLocale === 'en' ? 'ar' : 'en';
     window.localStorage.setItem('nivo-locale', activeLocale);
     const nextUrl = new URL(window.location.href);
     nextUrl.searchParams.set('lang', activeLocale);
     window.history.replaceState({}, '', nextUrl);
     renderContent();
-    setupScrollStory();
-    window.scrollTo(0, 0);
+    chapterContainer.scrollTo({ left: 0, behavior: 'auto' });
+    updateHorizontalStory();
     languageAnnouncement.textContent =
       locales[activeLocale].accessibility.languageAnnouncement;
   };
@@ -173,6 +227,5 @@ function changeLanguage() {
 }
 
 renderContent();
-setupSmoothScroll();
-setupScrollStory();
+setupHorizontalStory();
 languageSwitch.addEventListener('click', changeLanguage);
