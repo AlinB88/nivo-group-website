@@ -32,12 +32,11 @@ function chapterMarkup(chapter, index, chapters) {
   return `
     <section id="${chapter.id}" class="chapter chapter--${chapter.id}" data-chapter="${chapter.id}" data-wardrobe="${chapter.wardrobe}">
       <div class="chapter__content">
-        <p class="eyebrow">${chapter.eyebrow}</p>
         ${titleMarkup(chapter.title, headingLevel)}
         <p class="chapter__lede" data-typed-copy>${chapter.description}</p>
-        ${chapter.note ? `<p class="chapter__note">${chapter.note}</p>` : ''}
         <a class="chapter__link" href="${target}"><span>${chapter.label}</span><i aria-hidden="true"></i></a>
       </div>
+      ${chapter.note ? `<p class="chapter__note">${chapter.note}</p>` : ''}
     </section>
     ${index < chapters.length - 1 ? '<div class="chapter-divider" aria-hidden="true"><span></span><i></i><span></span></div>' : ''}
   `;
