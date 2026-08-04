@@ -11,15 +11,30 @@
     <title>NIVO Group — A clearer way forward</title>
   </head>
   <body data-wardrobe="base" data-chapter="hero">
+    <section
+      class="language-gate"
+      aria-labelledby="language-gate-title"
+      aria-modal="true"
+      role="dialog"
+      data-language-gate
+    >
+      <div class="language-gate__panel">
+        <p class="language-gate__mark" aria-hidden="true">NIVO</p>
+        <h1 id="language-gate-title">Choose a language</h1>
+        <div class="language-gate__choices">
+          <button type="button" data-language-choice="en">English</button>
+          <button type="button" data-language-choice="ar" lang="ar" dir="rtl">
+            العربية
+          </button>
+        </div>
+      </div>
+    </section>
+
     <a class="skip-link" href="#chapters" data-skip-link>Skip to chapters</a>
 
     <header class="site-header" data-header>
       <p class="header-status"><i aria-hidden="true"></i> In development</p>
       <a class="wordmark" href="#top" aria-label="NIVO Group home" data-home-link>NIVO</a>
-      <div class="header-actions">
-        <button class="language-switch" type="button" data-language-switch></button>
-        <p class="header-chapter" data-header-chapter>01 / 04</p>
-      </div>
     </header>
     <nav class="story-nav" aria-label="Chapter navigation" data-story-nav></nav>
 
@@ -63,9 +78,7 @@
         </div>
 
         <div class="scene-shell__content">
-          <p class="scene-kicker" data-scene-kicker></p>
-          <p class="scene-caption" data-scene-caption></p>
-          <div class="nivo-stage" aria-hidden="true">
+          <div class="nivo-stage">
             <div class="nivo-stage__halo"></div>
             <div class="nivo-stage__floor"></div>
             <img
@@ -97,6 +110,7 @@
               width="1254"
               height="1254"
             />
+            <p class="nivo-stage__label" data-scene-kicker></p>
           </div>
           <div class="scene-shell__meta" aria-hidden="true">
             <span data-scene-number>01</span

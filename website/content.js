@@ -39,7 +39,7 @@ export const locales = {
         title: ['A clearer', 'way forward.'],
         description:
           'NIVO is the helper, mentor, friend, and partner for business owners navigating work that needs care, privacy, and confident decisions.',
-        note: 'Built around trust, not noise.',
+        note: '',
         sceneCaption: 'A composed guide for important work.',
         label: 'Start the journey',
       },

@@ -3,27 +3,23 @@ import './styles.css';
 
 const chapterContainer = document.querySelector('[data-chapters]');
 const footer = document.querySelector('[data-footer]');
-const caption = document.querySelector('[data-scene-caption]');
 const kicker = document.querySelector('[data-scene-kicker]');
 const sceneNumber = document.querySelector('[data-scene-number]');
 const sceneProgress = document.querySelector('[data-scene-progress]');
-const headerChapter = document.querySelector('[data-header-chapter]');
 const headerStatus = document.querySelector('.header-status');
-const languageSwitch = document.querySelector('[data-language-switch]');
+const languageGate = document.querySelector('[data-language-gate]');
 const storyNavigation = document.querySelector('[data-story-nav]');
 const skipLink = document.querySelector('[data-skip-link]');
 const homeLink = document.querySelector('[data-home-link]');
 const sceneShell = document.querySelector('[data-scene-shell]');
 const languageAnnouncement = document.querySelector('[data-language-announcement]');
+const pageContent = [...document.body.children].filter(
+  (element) => element !== languageGate && element.tagName !== 'SCRIPT',
+);
 const localeFromUrl = new URLSearchParams(window.location.search).get('lang');
-let activeLocale =
-  localeFromUrl === 'ar'
-    ? 'ar'
-    : localeFromUrl === 'en'
-      ? 'en'
-      : window.localStorage.getItem('nivo-locale') === 'ar'
-        ? 'ar'
-        : 'en';
+let activeLocale = localeFromUrl === 'ar' ? 'ar' : localeFromUrl === 'en' ? 'en' : 'en';
+let activeChapterId = null;
+let typingTimer;
 
 function titleMarkup(lines, level) {
   return `<${level}>${lines.map((line) => `<span>${line}</span>`).join('')}</${level}>`;
@@ -38,8 +34,8 @@ function chapterMarkup(chapter, index, chapters) {
       <div class="chapter__content">
         <p class="eyebrow">${chapter.eyebrow}</p>
         ${titleMarkup(chapter.title, headingLevel)}
-        <p class="chapter__lede">${chapter.description}</p>
-        <p class="chapter__note">${chapter.note}</p>
+        <p class="chapter__lede" data-typed-copy>${chapter.description}</p>
+        ${chapter.note ? `<p class="chapter__note">${chapter.note}</p>` : ''}
         <a class="chapter__link" href="${target}"><span>${chapter.label}</span><i aria-hidden="true"></i></a>
       </div>
     </section>
@@ -68,15 +64,6 @@ function renderContent() {
   skipLink.textContent = locale.accessibility.skip;
   homeLink.setAttribute('aria-label', locale.accessibility.home);
   sceneShell.setAttribute('aria-label', locale.accessibility.scene);
-  languageSwitch.setAttribute('aria-label', locale.header.switchAria);
-  languageSwitch.setAttribute('title', locale.header.switchAria);
-  languageSwitch.innerHTML = `
-    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <circle cx="12" cy="12" r="8.25"></circle>
-      <path d="M3.9 12h16.2M12 3.75c2.25 2.3 3.4 5.05 3.4 8.25S14.25 17.95 12 20.25C9.75 17.95 8.6 15.2 8.6 12S9.75 6.05 12 3.75Z"></path>
-    </svg>
-    <span class="visually-hidden">${locale.header.switchAria}</span>
-  `;
   storyNavigation.setAttribute('aria-label', locale.accessibility.chapterNavigation);
   chapterContainer.setAttribute('aria-label', locale.accessibility.chapterNavigation);
   storyNavigation.innerHTML = locale.chapters
@@ -87,6 +74,30 @@ function renderContent() {
         </a>`,
     )
     .join('');
+}
+
+function typeChapterDescription(chapterId) {
+  window.clearTimeout(typingTimer);
+  const copy = document.querySelector(`#${chapterId} [data-typed-copy]`);
+  if (!copy || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const fullText = copy.dataset.fullCopy ?? copy.textContent.trim();
+  copy.dataset.fullCopy = fullText;
+  copy.textContent = '';
+  copy.classList.add('is-typing');
+  let character = 0;
+
+  const writeNextCharacter = () => {
+    copy.textContent = fullText.slice(0, character);
+    character += 1;
+    if (character <= fullText.length) {
+      typingTimer = window.setTimeout(writeNextCharacter, 10);
+      return;
+    }
+    copy.classList.remove('is-typing');
+  };
+
+  writeNextCharacter();
 }
 
 function setSceneProgress(progress) {
@@ -103,13 +114,15 @@ function activateChapter(element) {
 
   document.body.dataset.chapter = chapter.id;
   document.body.dataset.wardrobe = chapter.wardrobe;
-  kicker.textContent = `${chapter.number} / ${chapter.id === 'hero' ? brand.name : chapter.id.toUpperCase()}`;
-  caption.textContent = chapter.sceneCaption;
+  kicker.textContent = chapter.eyebrow.split(' / ')[0];
   sceneNumber.textContent = chapter.number;
-  headerChapter.textContent = `${chapter.number} / 04`;
   document.querySelectorAll('[data-story-link]').forEach((link) => {
     link.toggleAttribute('aria-current', link.dataset.storyLink === chapter.id);
   });
+  if (activeChapterId !== chapter.id) {
+    activeChapterId = chapter.id;
+    typeChapterDescription(chapter.id);
+  }
 }
 
 function getChapters() {
@@ -149,6 +162,7 @@ function setupHorizontalStory() {
   document.addEventListener(
     'wheel',
     (event) => {
+      if (!languageGate.hidden) return;
       const travel =
         Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
       if (!travel) return;
@@ -159,6 +173,7 @@ function setupHorizontalStory() {
   );
   chapterContainer.addEventListener('scroll', updateHorizontalStory, { passive: true });
   document.addEventListener('keydown', (event) => {
+    if (!languageGate.hidden) return;
     if (event.target.closest('input, textarea, select, [contenteditable="true"]')) return;
     const currentIndex = Math.round(
       chapterContainer.scrollLeft / chapterContainer.clientWidth,
@@ -200,12 +215,13 @@ function setupHorizontalStory() {
   });
 }
 
-function changeLanguage() {
+function selectLanguage(nextLocale) {
   const updateLanguage = () => {
-    activeLocale = activeLocale === 'en' ? 'ar' : 'en';
-    window.localStorage.setItem('nivo-locale', activeLocale);
+    activeLocale = nextLocale;
+    activeChapterId = null;
+    window.localStorage.setItem('nivo-locale', nextLocale);
     const nextUrl = new URL(window.location.href);
-    nextUrl.searchParams.set('lang', activeLocale);
+    nextUrl.searchParams.set('lang', nextLocale);
     window.history.replaceState({}, '', nextUrl);
     renderContent();
     chapterContainer.scrollTo({ left: 0, behavior: 'auto' });
@@ -225,6 +241,29 @@ function changeLanguage() {
   updateLanguage();
 }
 
+function closeLanguageGate() {
+  languageGate.classList.add('is-leaving');
+  window.setTimeout(
+    () => {
+      languageGate.hidden = true;
+      pageContent.forEach((element) => {
+        element.inert = false;
+      });
+      chapterContainer.focus({ preventScroll: true });
+    },
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 360,
+  );
+}
+
 renderContent();
 setupHorizontalStory();
-languageSwitch.addEventListener('click', changeLanguage);
+pageContent.forEach((element) => {
+  element.inert = true;
+});
+document.querySelectorAll('[data-language-choice]').forEach((button) => {
+  button.addEventListener('click', () => {
+    selectLanguage(button.dataset.languageChoice);
+    closeLanguageGate();
+  });
+});
+document.querySelector('[data-language-choice="en"]').focus();
