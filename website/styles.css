@@ -364,7 +364,7 @@ body[data-chapter] .scene-particles i {
   position: absolute;
   right: 0;
   bottom: 8%;
-  display: flex;
+  display: none;
   align-items: center;
   gap: 0.65rem;
   color: var(--muted);
@@ -662,17 +662,6 @@ h2 span {
     opacity: 0;
   }
 }
-.chapter__index {
-  position: absolute;
-  right: clamp(1.25rem, 4vw, 5rem);
-  bottom: clamp(3.8rem, 8vh, 7rem);
-  margin: 0;
-  color: rgb(244 243 239 / 17%);
-  font-family: Georgia, serif;
-  font-size: clamp(5rem, 12vw, 11rem);
-  font-style: italic;
-  line-height: 0.7;
-}
 .chapter-divider {
   display: block;
   flex: 0 0 0;
@@ -734,12 +723,13 @@ h2 span {
     bottom: 12%;
   }
   .scene-shell__meta {
+    display: flex;
     bottom: 5%;
   }
   .nivo-stage {
-    top: 49%;
+    top: 34%;
     left: 50%;
-    width: min(82vw, 26rem);
+    width: min(69vw, 22rem);
   }
   .nivo-stage__halo {
     width: 88%;
@@ -752,10 +742,6 @@ h2 span {
   }
   .chapter__content {
     max-width: 29rem;
-  }
-  .chapter__index {
-    right: 1.25rem;
-    bottom: 2.8rem;
   }
   h1,
   h2 {
@@ -815,10 +801,6 @@ h2 span {
 }
 [dir='rtl'] .chapter__lede {
   margin-right: 0;
-}
-[dir='rtl'] .chapter__index {
-  right: auto;
-  left: clamp(1.25rem, 4vw, 5rem);
 }
 [dir='rtl'] .scene-kicker,
 [dir='rtl'] .scene-caption {
@@ -880,10 +862,6 @@ h2 span {
   [dir='rtl'] .chapter__content {
     align-self: flex-end;
     text-align: right;
-  }
-  [dir='rtl'] .chapter__index {
-    right: auto;
-    left: 1.25rem;
   }
 }
 @media (prefers-reduced-motion: reduce) {
