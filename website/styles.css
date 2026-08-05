@@ -199,7 +199,7 @@ a:focus-visible {
   position: fixed;
   z-index: 11;
   top: 50%;
-  right: clamp(1.25rem, 4vw, 5rem);
+  left: clamp(1.25rem, 4vw, 5rem);
   display: grid;
   gap: 0.65rem;
   transform: translateY(-50%);
@@ -369,7 +369,7 @@ body[data-chapter] .scene-particles i {
   max-width: 120%;
   margin: 0;
   color: var(--gold);
-  font-size: 0.72rem;
+  font-size: clamp(0.82rem, 0.9vw, 1rem);
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -590,36 +590,64 @@ body[data-chapter='logistics'] .scene-shell__backdrop::before {
   position: relative;
   z-index: 2;
 }
-.chapter__note {
-  margin: 0;
-  color: var(--gold);
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  line-height: 1.5;
-  text-transform: uppercase;
+.chapter__notes {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
 }
 .chapter__note {
   position: absolute;
-  z-index: 0;
-  top: 50%;
-  right: clamp(1.25rem, 4vw, 5rem);
-  max-width: min(14rem, 17vw);
+  max-width: min(15rem, 18vw);
   margin: 0;
+  color: var(--ink);
+  font-size: clamp(0.82rem, 0.95vw, 1.05rem);
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+  opacity: 0.75;
   text-align: left;
-  opacity: 0.48;
-  pointer-events: none;
-  transform: translateY(-50%);
+  text-transform: uppercase;
+}
+.chapter--advisor .chapter__note:nth-child(1) {
+  top: 31%;
+  right: clamp(1.5rem, 7vw, 9rem);
+}
+.chapter--advisor .chapter__note:nth-child(2) {
+  top: 51%;
+  right: clamp(1.5rem, 3vw, 4.5rem);
+}
+.chapter--advisor .chapter__note:nth-child(3) {
+  top: 69%;
+  right: clamp(1.5rem, 8vw, 10rem);
+}
+.chapter--it .chapter__note:nth-child(1) {
+  top: 28%;
+  right: clamp(1.5rem, 6vw, 8rem);
+}
+.chapter--it .chapter__note:nth-child(2) {
+  top: 55%;
+  right: clamp(1.5rem, 3vw, 4.5rem);
+}
+.chapter--it .chapter__note:nth-child(3) {
+  top: 72%;
+  right: clamp(1.5rem, 7vw, 9rem);
+}
+.chapter--logistics .chapter__note {
+  top: 48%;
+  right: clamp(1.5rem, 6vw, 8rem);
 }
 h1,
 h2 {
   max-width: 43rem;
   margin: 1.2rem 0 0;
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
   font-size: clamp(3.3rem, 6.3vw, 7.1rem);
   font-weight: 500;
-  letter-spacing: -0.065em;
-  line-height: 0.88;
+  letter-spacing: -0.055em;
+  line-height: 0.92;
+  opacity: 0.75;
+  text-wrap: balance;
 }
 .chapter__title {
   position: absolute;
@@ -650,10 +678,6 @@ h2 {
   50% {
     opacity: 0;
   }
-}
-.chapter__note {
-  color: rgb(244 243 239 / 67%);
-  font-size: 0.72rem;
 }
 .chapter__link {
   display: inline-flex;
@@ -806,7 +830,7 @@ body[data-swipe-hint='visible'] .swipe-hint {
   }
   .nivo-stage__label {
     bottom: -1.9rem;
-    font-size: 0.67rem;
+    font-size: 0.78rem;
   }
   .nivo-stage__halo {
     width: 88%;
@@ -815,7 +839,7 @@ body[data-swipe-hint='visible'] .swipe-hint {
     display: flex;
     align-items: flex-end;
     padding-top: 7rem;
-    padding-bottom: 7rem;
+    padding-bottom: 4.5rem;
   }
   .chapter__content {
     position: static;
@@ -830,11 +854,25 @@ body[data-swipe-hint='visible'] .swipe-hint {
     max-width: 25rem;
   }
   .chapter__note {
-    top: 52%;
     right: 1.25rem;
-    max-width: 8.75rem;
-    font-size: 0.64rem;
-    line-height: 1.55;
+    max-width: 9.5rem;
+    font-size: 0.76rem;
+    line-height: 1.4;
+  }
+  .chapter--advisor .chapter__note:nth-child(1),
+  .chapter--it .chapter__note:nth-child(1) {
+    top: 31%;
+  }
+  .chapter--advisor .chapter__note:nth-child(2),
+  .chapter--it .chapter__note:nth-child(2) {
+    top: 46%;
+  }
+  .chapter--advisor .chapter__note:nth-child(3),
+  .chapter--it .chapter__note:nth-child(3) {
+    top: 61%;
+  }
+  .chapter--logistics .chapter__note {
+    top: 48%;
   }
   .chapter__title {
     top: 6.25rem;
@@ -846,7 +884,8 @@ body[data-swipe-hint='visible'] .swipe-hint {
   }
   .chapter__link {
     position: absolute;
-    bottom: 5%;
+    top: 65%;
+    bottom: auto;
     left: 1.25rem;
     margin: 0;
   }
@@ -886,8 +925,8 @@ body[data-swipe-hint='visible'] .swipe-hint {
   direction: rtl;
 }
 [dir='rtl'] .story-nav {
-  right: auto;
-  left: clamp(1.25rem, 4vw, 5rem);
+  right: clamp(1.25rem, 4vw, 5rem);
+  left: auto;
 }
 [dir='rtl'] .chapter {
   direction: rtl;
@@ -901,8 +940,29 @@ body[data-swipe-hint='visible'] .swipe-hint {
 }
 [dir='rtl'] .chapter__note {
   right: auto;
-  left: clamp(1.25rem, 4vw, 5rem);
+  left: clamp(1.5rem, 7vw, 9rem);
   text-align: right;
+}
+[dir='rtl'] .chapter--advisor .chapter__note:nth-child(1) {
+  left: clamp(1.5rem, 7vw, 9rem);
+}
+[dir='rtl'] .chapter--advisor .chapter__note:nth-child(2) {
+  left: clamp(1.5rem, 3vw, 4.5rem);
+}
+[dir='rtl'] .chapter--advisor .chapter__note:nth-child(3) {
+  left: clamp(1.5rem, 8vw, 10rem);
+}
+[dir='rtl'] .chapter--it .chapter__note:nth-child(1) {
+  left: clamp(1.5rem, 6vw, 8rem);
+}
+[dir='rtl'] .chapter--it .chapter__note:nth-child(2) {
+  left: clamp(1.5rem, 3vw, 4.5rem);
+}
+[dir='rtl'] .chapter--it .chapter__note:nth-child(3) {
+  left: clamp(1.5rem, 7vw, 9rem);
+}
+[dir='rtl'] .chapter--logistics .chapter__note {
+  left: clamp(1.5rem, 6vw, 8rem);
 }
 [dir='rtl'] .chapter__title {
   right: clamp(1.25rem, 4vw, 5rem);
@@ -957,11 +1017,11 @@ body[data-swipe-hint='visible'] .swipe-hint {
     font-size: clamp(3.5rem, 6.2vw, 5.4rem);
   }
   .story-nav {
-    right: 1.25rem;
+    left: 1.25rem;
   }
   [dir='rtl'] .story-nav {
-    right: auto;
-    left: 1.25rem;
+    right: 1.25rem;
+    left: auto;
   }
 }
 

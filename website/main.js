@@ -30,6 +30,7 @@ function titleMarkup(lines, level) {
 function chapterMarkup(chapter, index, chapters) {
   const headingLevel = index === 0 ? 'h1' : 'h2';
   const target = index < chapters.length - 1 ? `#${chapters[index + 1].id}` : '#top';
+  const notes = chapter.note ? chapter.note.split(' · ') : [];
 
   return `
     <section id="${chapter.id}" class="chapter chapter--${chapter.id}" data-chapter="${chapter.id}" data-wardrobe="${chapter.wardrobe}">
@@ -38,7 +39,13 @@ function chapterMarkup(chapter, index, chapters) {
         <p class="chapter__lede" data-typed-copy>${chapter.description}</p>
         <a class="chapter__link" href="${target}"><span>${chapter.label}</span><i aria-hidden="true"></i></a>
       </div>
-      ${chapter.note ? `<p class="chapter__note">${chapter.note}</p>` : ''}
+      ${
+        notes.length
+          ? `<div class="chapter__notes" aria-label="${notes.join(', ')}">${notes
+              .map((note) => `<p class="chapter__note">${note}</p>`)
+              .join('')}</div>`
+          : ''
+      }
     </section>
     ${index < chapters.length - 1 ? '<div class="chapter-divider" aria-hidden="true"><span></span><i></i><span></span></div>' : ''}
   `;
