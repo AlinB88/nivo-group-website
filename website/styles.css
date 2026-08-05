@@ -746,28 +746,28 @@ body[data-swipe-hint='visible'] .swipe-hint {
   0%,
   40% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate(-50%, 0);
   }
   50%,
   100% {
     opacity: 0;
-    transform: translateY(0.45rem);
+    transform: translate(-50%, 0.45rem);
   }
 }
 @keyframes journey-link-cue {
   0%,
   40% {
     opacity: 0;
-    transform: translateY(0.45rem);
+    transform: translate(-50%, 0.45rem);
   }
   50%,
   90% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate(-50%, 0);
   }
   100% {
     opacity: 0;
-    transform: translateY(-0.25rem);
+    transform: translate(-50%, -0.25rem);
   }
 }
 @keyframes swipe-prompt {
@@ -867,7 +867,7 @@ body[data-swipe-hint='visible'] .swipe-hint {
     display: flex;
     align-items: flex-end;
     padding-top: 7rem;
-    padding-bottom: 4.5rem;
+    padding-bottom: 6rem;
   }
   .chapter__content {
     position: static;
@@ -917,25 +917,27 @@ body[data-swipe-hint='visible'] .swipe-hint {
     left: 1.25rem;
     margin: 0;
   }
-  body[data-swipe-hint='visible'][data-chapter='hero'] .swipe-hint {
-    top: 65%;
-    bottom: auto;
-    left: 1.25rem;
+  body[data-swipe-hint='visible'] .swipe-hint {
+    top: auto;
+    bottom: 9%;
+    left: 50%;
     font-size: 0.62rem;
     opacity: 0;
-    transform: translateY(0);
+    transform: translateX(-50%);
     animation: journey-swipe-cue 6.4s ease-in-out infinite;
   }
-  body[data-swipe-hint='visible'][data-chapter='hero'] .chapter--hero .chapter__link {
+  body[data-swipe-hint='visible'] .chapter__link {
+    top: auto;
+    bottom: 9%;
+    left: 50%;
     opacity: 0;
+    transform: translateX(-50%);
     animation: journey-link-cue 6.4s ease-in-out infinite;
   }
-  body[data-swipe-hint='visible'][data-chapter='hero']
-    .chapter--hero
-    .chapter__link:focus-visible {
+  body[data-swipe-hint='visible'] .chapter__link:focus-visible {
     opacity: 1;
     animation: none;
-    transform: none;
+    transform: translateX(-50%);
   }
   .chapter-divider {
     display: block;
@@ -1090,9 +1092,13 @@ body[data-swipe-hint='visible'] .swipe-hint {
     right: 1.25rem;
     left: auto;
   }
-  [dir='rtl'] body[data-swipe-hint='visible'][data-chapter='hero'] .swipe-hint {
-    right: 1.25rem;
-    left: auto;
+  [dir='rtl'] body[data-swipe-hint='visible'] .swipe-hint {
+    right: auto;
+    left: 50%;
+  }
+  [dir='rtl'] body[data-swipe-hint='visible'] .chapter__link {
+    right: auto;
+    left: 50%;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1104,11 +1110,11 @@ body[data-swipe-hint='visible'] .swipe-hint {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
   }
-  body[data-swipe-hint='visible'][data-chapter='hero'] .swipe-hint {
+  body[data-swipe-hint='visible'] .swipe-hint {
     display: none;
   }
-  body[data-swipe-hint='visible'][data-chapter='hero'] .chapter--hero .chapter__link {
+  body[data-swipe-hint='visible'] .chapter__link {
     opacity: 1;
-    transform: none;
+    transform: translateX(-50%);
   }
 }
