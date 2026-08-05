@@ -21,7 +21,6 @@ const localeFromUrl = new URLSearchParams(window.location.search).get('lang');
 let activeLocale = localeFromUrl === 'ar' ? 'ar' : localeFromUrl === 'en' ? 'en' : 'en';
 let activeChapterId = null;
 let typingTimer;
-let swipeHintTimer;
 
 function titleMarkup(lines, level) {
   return `<${level} class="chapter__title">${lines.join(' ')}</${level}>`;
@@ -273,11 +272,7 @@ function selectLanguage(nextLocale) {
 }
 
 function showSwipeHint() {
-  window.clearTimeout(swipeHintTimer);
   document.body.dataset.swipeHint = 'visible';
-  swipeHintTimer = window.setTimeout(() => {
-    delete document.body.dataset.swipeHint;
-  }, 5200);
 }
 
 function closeLanguageGate() {

@@ -742,6 +742,34 @@ h2 {
 body[data-swipe-hint='visible'] .swipe-hint {
   opacity: 1;
 }
+@keyframes journey-swipe-cue {
+  0%,
+  40% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  50%,
+  100% {
+    opacity: 0;
+    transform: translateY(0.45rem);
+  }
+}
+@keyframes journey-link-cue {
+  0%,
+  40% {
+    opacity: 0;
+    transform: translateY(0.45rem);
+  }
+  50%,
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+}
 @keyframes swipe-prompt {
   50% {
     transform: translateX(-0.35rem);
@@ -888,6 +916,26 @@ body[data-swipe-hint='visible'] .swipe-hint {
     bottom: auto;
     left: 1.25rem;
     margin: 0;
+  }
+  body[data-swipe-hint='visible'][data-chapter='hero'] .swipe-hint {
+    top: 65%;
+    bottom: auto;
+    left: 1.25rem;
+    font-size: 0.62rem;
+    opacity: 0;
+    transform: translateY(0);
+    animation: journey-swipe-cue 6.4s ease-in-out infinite;
+  }
+  body[data-swipe-hint='visible'][data-chapter='hero'] .chapter--hero .chapter__link {
+    opacity: 0;
+    animation: journey-link-cue 6.4s ease-in-out infinite;
+  }
+  body[data-swipe-hint='visible'][data-chapter='hero']
+    .chapter--hero
+    .chapter__link:focus-visible {
+    opacity: 1;
+    animation: none;
+    transform: none;
   }
   .chapter-divider {
     display: block;
@@ -1042,6 +1090,10 @@ body[data-swipe-hint='visible'] .swipe-hint {
     right: 1.25rem;
     left: auto;
   }
+  [dir='rtl'] body[data-swipe-hint='visible'][data-chapter='hero'] .swipe-hint {
+    right: 1.25rem;
+    left: auto;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -1051,5 +1103,12 @@ body[data-swipe-hint='visible'] .swipe-hint {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+  body[data-swipe-hint='visible'][data-chapter='hero'] .swipe-hint {
+    display: none;
+  }
+  body[data-swipe-hint='visible'][data-chapter='hero'] .chapter--hero .chapter__link {
+    opacity: 1;
+    transform: none;
   }
 }
